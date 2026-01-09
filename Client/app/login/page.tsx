@@ -60,7 +60,7 @@ const Login = () => {
             id: data.user.id,
             name: data.user.pseudo || data.user.identifier, // affichage
             avatar: '/assets/Coupe_Casquette.png',
-            eter: data.user.balance ?? 0,
+            balance: data.user.balance ?? 0,
           },
         })
       );
