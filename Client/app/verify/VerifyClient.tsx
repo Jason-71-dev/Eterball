@@ -34,7 +34,7 @@ export default function VerifyClient() {
         }
 
         if (!cancelled) {
-          setMsg('Email vérifié ✅ Redirection vers la connexion…');
+          setMsg('Email vérifié Redirection vers la connexion…');
           setTimeout(() => router.push('/login?verified=true'), 1200);
         }
       } catch {

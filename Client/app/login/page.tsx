@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import './login.scss';
@@ -9,10 +9,17 @@ import { login } from '../store/auth/authSlice';
 import { RootState } from '../store/auth';
 import { API_ORIGIN } from '@/services/apiOrigin';
 
+type LoginError = {
+  error?: string;
+  code?: string;
+};
+
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
   const [blockedMsg, setBlockedMsg] = useState<string | null>(null);
+  const [blockedCode, setBlockedCode] = useState<string | null>(null);
 
   // resend UI
   const [resendEmail, setResendEmail] = useState('');
@@ -20,8 +27,11 @@ const Login = () => {
   const [resending, setResending] = useState(false);
 
   const router = useRouter();
+  const params = useSearchParams();
   const dispatch = useDispatch();
   const isConnected = useSelector((store: RootState) => store.auth.isConnected);
+
+  const verified = useMemo(() => params.get('verified') === 'true', [params]);
 
   useEffect(() => {
     if (isConnected) router.replace('/');
@@ -30,6 +40,7 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setBlockedMsg(null);
+    setBlockedCode(null);
     setResendMsg(null);
 
     if (!username || !password) {
@@ -41,17 +52,20 @@ const Login = () => {
       const response = await fetch(`${API_ORIGIN}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username: username.trim(), password }),
       });
 
-      const data = await response.json().catch(() => null);
+      const data: any = await response.json().catch(() => null);
 
       if (!response.ok) {
-        const errMsg = data?.error || 'Erreur lors de la connexion';
+        const errMsg =
+          (data as LoginError)?.error || 'Erreur lors de la connexion';
+        const errCode = (data as LoginError)?.code || null;
 
-        // ✅ cas email non vérifié
-        if (response.status === 403) {
+        // Affichage du bloc resend uniquement si EMAIL_NOT_VERIFIED
+        if (response.status === 403 && errCode === 'EMAIL_NOT_VERIFIED') {
           setBlockedMsg(errMsg);
+          setBlockedCode(errCode);
           return;
         }
 
@@ -84,20 +98,22 @@ const Login = () => {
   const handleResend = async () => {
     setResendMsg(null);
 
-    if (!resendEmail.trim()) {
+    const email = resendEmail.trim().toLowerCase();
+    if (!email) {
       setResendMsg("Entre l'email utilisé à l'inscription.");
       return;
     }
 
     try {
       setResending(true);
+
       const res = await fetch(`${API_ORIGIN}/resend-verification`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: resendEmail.trim().toLowerCase() }),
+        body: JSON.stringify({ email }),
       });
 
-      const data = await res.json().catch(() => null);
+      const data: any = await res.json().catch(() => null);
 
       if (!res.ok) {
         setResendMsg(data?.error || 'Impossible de renvoyer le mail.');
@@ -117,6 +133,12 @@ const Login = () => {
       <form onSubmit={handleLogin}>
         <h2>Connexion</h2>
 
+        {verified && (
+          <p style={{ margin: 0, opacity: 0.95 }}>
+            Email vérifié, tu peux te connecter.
+          </p>
+        )}
+
         <label>
           <div className="label-row">
             Nom d&apos;utilisateur <span className="star">*</span>
@@ -125,6 +147,7 @@ const Login = () => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            autoComplete="username"
           />
         </label>
 
@@ -136,12 +159,13 @@ const Login = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            autoComplete="current-password"
           />
         </label>
 
         <button type="submit">Se connecter</button>
 
-        {blockedMsg && (
+        {blockedMsg && blockedCode === 'EMAIL_NOT_VERIFIED' && (
           <div style={{ width: 300, marginTop: 10 }}>
             <p style={{ margin: 0 }}>{blockedMsg}</p>
 
@@ -166,6 +190,7 @@ const Login = () => {
               >
                 {resending ? 'Envoi…' : 'Renvoyer le mail de confirmation'}
               </button>
+
               {resendMsg && <p style={{ marginTop: 8 }}>{resendMsg}</p>}
             </div>
           </div>
