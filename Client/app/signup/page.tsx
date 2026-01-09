@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import './signup.scss';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store/auth';
-import { API_ORIGIN } from '@/services/apiOrigin'; // adapte le chemin si besoin
+import { API_ORIGIN } from '@/services/apiOrigin';
 import Link from 'next/link';
 
 export default function SignUp() {
@@ -18,6 +18,11 @@ export default function SignUp() {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
 
+  // ✅ NEW: UI messages + loading
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const router = useRouter();
   const isConnected = useSelector((s: RootState) => s.auth.isConnected);
 
@@ -27,6 +32,10 @@ export default function SignUp() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // ✅ reset messages
+    setErrorMsg(null);
+    setSuccessMsg(null);
 
     if (
       !username ||
@@ -38,11 +47,16 @@ export default function SignUp() {
       !month ||
       !year
     ) {
-      alert('Merci de remplir tous les champs !');
+      const msg = 'Merci de remplir tous les champs !';
+      setErrorMsg(msg);
+      alert(msg);
       return;
     }
+
     if (password !== confirmPassword) {
-      alert('Les mots de passe ne correspondent pas !');
+      const msg = 'Les mots de passe ne correspondent pas !';
+      setErrorMsg(msg);
+      alert(msg);
       return;
     }
 
@@ -52,6 +66,8 @@ export default function SignUp() {
     )}`;
 
     try {
+      setIsSubmitting(true);
+
       const res = await fetch(`${API_ORIGIN}/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -64,20 +80,38 @@ export default function SignUp() {
         }),
       });
 
+      // ✅ robust json parsing
       const data = await res.json().catch(() => null);
 
       if (!res.ok) {
-        alert(
-          data?.error || data?.message || 'Erreur lors de la création du compte'
-        );
+        // ✅ explicit duplicate email handling (backend should return 409)
+        if (res.status === 409) {
+          const msg = data?.message || 'Un compte avec cet email existe déjà.';
+          setErrorMsg(msg);
+          alert(msg);
+          return;
+        }
+
+        const msg =
+          data?.error ||
+          data?.message ||
+          'Erreur lors de la création du compte';
+        setErrorMsg(msg);
+        alert(msg);
         return;
       }
 
-      alert('Compte créé avec succès !');
+      const msg = data?.message || 'Compte créé avec succès !';
+      setSuccessMsg(msg);
+      alert(msg);
       router.push('/login');
     } catch (err) {
       console.error(err);
-      alert('Erreur serveur');
+      const msg = 'Erreur serveur';
+      setErrorMsg(msg);
+      alert(msg);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -85,6 +119,10 @@ export default function SignUp() {
     <div id="signUpPage">
       <form onSubmit={handleSubmit} id="formSignUp">
         <h2 id="account">Créer un compte</h2>
+
+        {/* ✅ NEW: inline messages (optionnel, stylable via SCSS) */}
+        {errorMsg && <p className="form-message error">{errorMsg}</p>}
+        {successMsg && <p className="form-message success">{successMsg}</p>}
 
         <label>
           <div className="label-row">
@@ -189,7 +227,10 @@ export default function SignUp() {
           </div>
         </label>
 
-        <button type="submit">Créer mon compte</button>
+        {/* ✅ NEW: disable while submitting */}
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Création...' : 'Créer mon compte'}
+        </button>
 
         <p>
           Déjà un compte ? <Link href="/login">Se connecter</Link>

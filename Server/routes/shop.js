@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Item = require('../models/Item');
-
+const User = require('../models/User');
 // Route pour obtenir tous les articles
 router.get('/items', async (req, res) => {
   try {
