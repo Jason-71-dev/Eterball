@@ -30,19 +30,6 @@ const AccountPage = () => {
             <br />
             ici tu peux gérer ton compte
           </h1>
-
-          {!isConnected && (
-            <>
-              <p>
-                Connecte-toi pour accéder à tes informations et à ton
-                inventaire.
-              </p>
-
-              <Link className="btn-primary" href="/login">
-                Se connecter
-              </Link>
-            </>
-          )}
         </div>
       </section>
 
