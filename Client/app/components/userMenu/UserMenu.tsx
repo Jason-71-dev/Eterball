@@ -79,7 +79,7 @@ const UserMenu: FC = () => {
           </div>
           <div className={styles.content}>
             <div className={styles.eterBox}>
-              <p>Eter : {user.eter}</p>
+              <p>Eter : {user.balance}</p>
               <a href="/acheter-eter">Acheter des Eter</a>
             </div>
             <div className={styles.links}>
