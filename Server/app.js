@@ -6,7 +6,7 @@ const cors = require('cors');
 
 dotenv.config();
 
-const authRoutes = require('./routes/auth'); // ✅ nouveau fichier unique
+const authRoutes = require('./routes/auth'); // nouveau fichier unique
 const shopRoutes = require('./routes/shop');
 const classesRoutes = require('./routes/classes');
 
@@ -30,6 +30,9 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
+const accountRoutes = require('./routes/account');
+
+app.use('/account', accountRoutes);
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
 app.use(express.json());
@@ -38,7 +41,7 @@ app.use(morgan('combined'));
 // Health
 app.get('/health', (req, res) => res.status(200).send('ok'));
 
-// ✅ Routes
+// Routes
 app.use('/auth', authRoutes); // POST /auth/signup | POST /auth/login
 app.use('/shop', shopRoutes);
 app.use('/api', classesRoutes);
