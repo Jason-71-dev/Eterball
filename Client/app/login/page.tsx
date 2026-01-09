@@ -31,6 +31,7 @@ const Login = () => {
 
     try {
       // nouvelle route
+
       const response = await fetch(`${API_ORIGIN}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

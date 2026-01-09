@@ -146,22 +146,31 @@ router.post('/login', async (req, res) => {
   try {
     const cleanIdentifier = normalizeIdentifier(identifier);
 
+    console.log('[LOGIN] identifier raw:', identifier);
+    console.log('[LOGIN] identifier clean:', cleanIdentifier);
+
     const user = await User.findOne({ identifier: cleanIdentifier });
+    console.log('[LOGIN] user found:', !!user);
+
     if (!user) {
-      return res
-        .status(401)
-        .json({ message: 'Identifiant ou mot de passe invalide' });
+      return res.status(401).json({
+        message: 'Identifiant introuvable',
+        code: 'IDENTIFIER_NOT_FOUND',
+      });
     }
 
     const ok = await bcrypt.compare(password, user.password);
+    console.log('[LOGIN] password match:', ok);
+
     if (!ok) {
-      return res
-        .status(401)
-        .json({ message: 'Identifiant ou mot de passe invalide' });
+      return res.status(401).json({
+        message: 'Mot de passe invalide',
+        code: 'WRONG_PASSWORD',
+      });
     }
 
     if (!process.env.JWT_SECRET) {
-      console.error('JWT_SECRET manquant dans les variables d’environnement');
+      console.error('JWT_SECRET manquant');
       return res
         .status(500)
         .json({ message: 'Config serveur manquante (JWT_SECRET)' });
