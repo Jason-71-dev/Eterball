@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import './inventory.scss';
@@ -56,10 +57,10 @@ const InventoryPage = () => {
 
   return (
     <main id="inventoryPage">
-      <header className="inventory-header">
+      <div className="inventory-header">
         <div className="header-left">
           <h1>Inventaire</h1>
-          <p>Retrouve ici les objets que tu as achetÃ©s.</p>
+          <p>Retrouve ici les objets que tu as achetes.</p>
         </div>
 
         <div className="header-right">
@@ -67,10 +68,10 @@ const InventoryPage = () => {
             Retour compte
           </Link>
           <Link className="btn-gold" href="/shop">
-            Aller Ã  la boutique
+            Aller a la boutique
           </Link>
         </div>
-      </header>
+      </div>
 
       <section className="inventory-container">
         <div className="inventory-card">
@@ -99,15 +100,31 @@ const InventoryPage = () => {
               </div>
             ) : (
               <ul className="inventory-grid">
-                {inventory.map((it) => (
-                  <li key={it._id} className="item-card">
-                    <div className="item-img">{/* image ici */}</div>
-                    <div className="item-body">
-                      <p className="item-name">{it.name}</p>
-                      <p className="item-meta">{it.price} Eter</p>
-                    </div>
-                  </li>
-                ))}
+                {inventory.map((it) => {
+                  const imageSrc = it.imageUrl ?? it.imageURL;
+
+                  return (
+                    <li key={it._id} className="item-card">
+                      <div className="item-img">
+                        {imageSrc ? (
+                          <Image
+                            src={imageSrc}
+                            alt={it.name || 'Item'}
+                            fill
+                            sizes="(max-width: 440px) 100vw, (max-width: 760px) 50vw, (max-width: 1020px) 33vw, 25vw"
+                            className="item-img__image"
+                          />
+                        ) : (
+                          <span>Aucune image</span>
+                        )}
+                      </div>
+                      <div className="item-body">
+                        <p className="item-name">{it.name}</p>
+                        <p className="item-meta">{it.price} Eter</p>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>
