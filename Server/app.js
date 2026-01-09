@@ -30,13 +30,13 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
-const accountRoutes = require('./routes/account');
-const User = require('./models/User');
-app.use('/account', accountRoutes);
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
 app.use(express.json());
 app.use(morgan('combined'));
+const accountRoutes = require('./routes/account');
+const User = require('./models/User');
+app.use('/account', accountRoutes);
 
 // Health
 app.get('/health', (req, res) => res.status(200).send('ok'));
