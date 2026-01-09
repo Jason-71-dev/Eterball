@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Item = require('../models/Item');
 const User = require('../models/User');
-const authenticateToken = require('../middleware/auth'); // ✅ JWT middleware
+const authenticateToken = require('../middleware/auth'); // JWT middleware
 
-// ✅ GET /shop/items (public)
+// GET /shop/items (public)
 router.get('/items', async (req, res) => {
   try {
     const items = await Item.find();
@@ -17,7 +17,7 @@ router.get('/items', async (req, res) => {
   }
 });
 
-// ✅ POST /shop/buy/:itemId (protected)
+// POST /shop/buy/:itemId (protected)
 // IMPORTANT: userId vient du token, pas du body
 router.post('/buy/:itemId', authenticateToken, async (req, res) => {
   try {
@@ -33,7 +33,7 @@ router.post('/buy/:itemId', authenticateToken, async (req, res) => {
     if (!user)
       return res.status(404).json({ message: 'Utilisateur non trouvé.' });
 
-    // ✅ Optionnel mais conseillé : éviter achat doublon
+    // Optionnel mais conseillé : éviter achat doublon
     const alreadyOwned = user.inventory.some(
       (id) => id.toString() === item._id.toString()
     );
@@ -62,7 +62,7 @@ router.post('/buy/:itemId', authenticateToken, async (req, res) => {
   }
 });
 
-// ✅ POST /shop/items (protected)
+// POST /shop/items (protected)
 // (Idéalement réservé admin, mais au minimum protégé par JWT)
 router.post('/items', authenticateToken, async (req, res) => {
   try {

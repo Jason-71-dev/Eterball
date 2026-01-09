@@ -84,7 +84,12 @@ const Login = () => {
           <input
             type="text"
             value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
+            onChange={(e) =>
+              setIdentifier(
+                e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '')
+              )
+            }
+            placeholder="ex: jason_71"
             autoComplete="username"
           />
         </label>

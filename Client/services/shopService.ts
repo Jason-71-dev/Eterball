@@ -1,6 +1,6 @@
+import { AppDispatch } from '@/app/store/auth';
+import { setBalance } from '@/app/store/auth/authSlice';
 import { API_ORIGIN } from '@/services/apiOrigin';
-import { setBalance } from '@/store/auth/authSlice';
-import type { AppDispatch } from '@/store/auth';
 
 export async function buyItem(
   itemId: string,

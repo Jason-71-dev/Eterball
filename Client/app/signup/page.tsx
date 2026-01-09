@@ -61,7 +61,7 @@ const SignUp = () => {
     const cleanPseudo = pseudo.trim();
     const cleanEmail = email.trim().toLowerCase();
 
-    // ✅ champs requis
+    // champs requis
     if (
       !cleanIdentifier ||
       !cleanFirstName ||
@@ -80,7 +80,7 @@ const SignUp = () => {
       return;
     }
 
-    // ✅ identifiant (format)
+    // identifiant (format)
     const identifierError = validateIdentifier(cleanIdentifier);
     if (identifierError) {
       setErrorMsg(identifierError);
@@ -88,7 +88,7 @@ const SignUp = () => {
       return;
     }
 
-    // ✅ mot de passe (sécurité)
+    // mot de passe (sécurité)
     const passwordError = validatePassword(password);
     if (passwordError) {
       setErrorMsg(passwordError);
@@ -96,7 +96,7 @@ const SignUp = () => {
       return;
     }
 
-    // ✅ confirmation
+    // confirmation
     if (password !== confirmPassword) {
       const msg = 'Les mots de passe ne correspondent pas !';
       setErrorMsg(msg);
