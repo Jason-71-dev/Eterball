@@ -27,9 +27,9 @@ const useAuth = () => {
             token: token,
             user: {
               id: user.id,
-              name: user.username,
+              name: user.pseudo || user.identifier || user.username,
               avatar: user.avatar || '/assets/Coupe_Casquette.png',
-              eter: user.balance ?? 0,
+              balance: user.balance ?? 0,
             },
           })
         );
