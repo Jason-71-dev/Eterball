@@ -129,8 +129,8 @@ const Acceuil = () => {
           />
           <Image
             id="img-teamDepart"
-            src="/entrainement_agilite1.png"
-            alt="Team Dragons"
+            src="/Entrainement_agilite1.png"
+            alt="Entrainement Agilité"
             width={400}
             height={250}
           />
