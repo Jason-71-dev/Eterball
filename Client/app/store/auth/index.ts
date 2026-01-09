@@ -1,13 +1,13 @@
 'use client';
+
 import { configureStore } from '@reduxjs/toolkit';
-import authSlice from './authSlice';
-// Création du store
+import authReducer from './authSlice';
+
 export const store = configureStore({
   reducer: {
-    auth: authSlice,
+    auth: authReducer,
   },
 });
 
-// 🔥 Types automatiques pour ton projet
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

@@ -1,10 +1,10 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-type User = {
+export type User = {
   id: string;
-  name: string;
+  name: string; // pseudo ou identifier
   avatar: string;
-  eter: number;
+  balance: number; // remplace eter
 };
 
 interface AuthState {
@@ -33,6 +33,14 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.isConnected = true;
     },
+
+    // NEW: mise à jour du solde après achat (ou autre)
+    setBalance: (state, action: PayloadAction<number>) => {
+      if (state.user) {
+        state.user.balance = action.payload;
+      }
+    },
+
     logout: (state) => {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('token');
@@ -46,5 +54,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, setBalance } = authSlice.actions;
 export default authSlice.reducer;
