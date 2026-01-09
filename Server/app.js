@@ -31,7 +31,7 @@ const corsOptions = {
 };
 
 const accountRoutes = require('./routes/account');
-
+const User = require('./models/User');
 app.use('/account', accountRoutes);
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
@@ -50,7 +50,11 @@ app.use('/api', classesRoutes);
 console.log('Tentative de connexion MongoDB...');
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log('Connecté à MongoDB'))
+  .then(async () => {
+    console.log('Connecté à MongoDB');
+    await User.syncIndexes();
+    console.log('Indexes User synchronisés');
+  })
   .catch((err) => console.error('Erreur MongoDB:', err));
 
 app.listen(PORT, () => {

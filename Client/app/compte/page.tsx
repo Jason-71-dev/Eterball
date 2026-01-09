@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import './account.scss';
 import { RootState } from '../store/auth';
 
-export default function AccountPage() {
+const AccountPage = () => {
   const isConnected = useSelector((s: RootState) => s.auth.isConnected);
   const user = useSelector((s: RootState) => s.auth.user);
 
@@ -53,8 +53,6 @@ export default function AccountPage() {
       <section className="account-content">
         <div className="account-grid">
           <article className="card">
-            <header className="card-title">Informations de compte</header>
-
             <div className="card-body">
               <div className="row">
                 <div className="label">Adresse e-mail</div>
@@ -85,8 +83,6 @@ export default function AccountPage() {
           </article>
 
           <article className="card">
-            <header className="card-title">Booster et paiement</header>
-
             <div className="card-body">
               <p className="muted">
                 Temps restant du booster
@@ -101,8 +97,6 @@ export default function AccountPage() {
             </footer>
 
             <div className="card-divider" />
-
-            <header className="card-title sub">Historique des paiements</header>
 
             <div className="card-body">
               <p className="muted">
@@ -120,8 +114,6 @@ export default function AccountPage() {
           </article>
 
           <article className="card">
-            <header className="card-title">Changer mon mot de passe</header>
-
             <div className="card-body">
               <p className="muted">
                 Vous pouvez modifier votre mot de passe à tout moment.
@@ -147,7 +139,7 @@ export default function AccountPage() {
             </div>
 
             <footer className="card-footer">
-              <Link className="btn-secondary link-btn" href="/inventory">
+              <Link className="btn-secondary link-btn" href="/inventaire">
                 Voir mon inventaire
               </Link>
             </footer>
@@ -177,4 +169,6 @@ export default function AccountPage() {
       </section>
     </main>
   );
-}
+};
+
+export default AccountPage;

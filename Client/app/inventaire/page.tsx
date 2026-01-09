@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import './inventory.scss';
 
-export default function InventoryPage() {
+const InventoryPage = () => {
   const inventory: any[] = []; // plus tard: data API
 
   return (
@@ -62,4 +62,6 @@ export default function InventoryPage() {
       </section>
     </main>
   );
-}
+};
+
+export default InventoryPage;
