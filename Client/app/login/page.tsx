@@ -10,7 +10,6 @@ import { RootState } from '../store/auth';
 import { API_ORIGIN } from '@/services/apiOrigin';
 
 const Login = () => {
-  // ✅ maintenant c'est l'identifiant
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
 

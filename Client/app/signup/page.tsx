@@ -8,12 +8,27 @@ import type { RootState } from '../store/auth';
 import { API_ORIGIN } from '@/services/apiOrigin';
 import Link from 'next/link';
 
-export default function SignUp() {
-  // nouveaux champs
+const IDENTIFIER_REGEX = /^[a-z0-9_]{3,30}$/;
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+function validateIdentifier(identifier: string): string | null {
+  if (!IDENTIFIER_REGEX.test(identifier)) {
+    return "L'identifiant doit contenir 3 à 30 caractères, uniquement des lettres minuscules, chiffres ou _.";
+  }
+  return null;
+}
+
+function validatePassword(password: string): string | null {
+  if (!PASSWORD_REGEX.test(password)) {
+    return 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.';
+  }
+  return null;
+}
+
+const SignUp = () => {
   const [identifier, setIdentifier] = useState('');
   const [firstName, setFirstName] = useState('');
 
-  // existants (renommés pour matcher le backend)
   const [lastName, setLastName] = useState('');
   const [pseudo, setPseudo] = useState('');
 
@@ -40,12 +55,19 @@ export default function SignUp() {
     setErrorMsg(null);
     setSuccessMsg(null);
 
+    const cleanIdentifier = identifier.trim().toLowerCase();
+    const cleanFirstName = firstName.trim();
+    const cleanLastName = lastName.trim();
+    const cleanPseudo = pseudo.trim();
+    const cleanEmail = email.trim().toLowerCase();
+
+    // ✅ champs requis
     if (
-      !identifier ||
-      !firstName ||
-      !lastName ||
-      !pseudo ||
-      !email ||
+      !cleanIdentifier ||
+      !cleanFirstName ||
+      !cleanLastName ||
+      !cleanPseudo ||
+      !cleanEmail ||
       !password ||
       !confirmPassword ||
       !day ||
@@ -58,6 +80,23 @@ export default function SignUp() {
       return;
     }
 
+    // ✅ identifiant (format)
+    const identifierError = validateIdentifier(cleanIdentifier);
+    if (identifierError) {
+      setErrorMsg(identifierError);
+      alert(identifierError);
+      return;
+    }
+
+    // ✅ mot de passe (sécurité)
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      setErrorMsg(passwordError);
+      alert(passwordError);
+      return;
+    }
+
+    // ✅ confirmation
     if (password !== confirmPassword) {
       const msg = 'Les mots de passe ne correspondent pas !';
       setErrorMsg(msg);
@@ -77,11 +116,11 @@ export default function SignUp() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          identifier: identifier.trim(),
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
-          pseudo: pseudo.trim(),
-          email: email.trim().toLowerCase(),
+          identifier: cleanIdentifier,
+          firstName: cleanFirstName,
+          lastName: cleanLastName,
+          pseudo: cleanPseudo,
+          email: cleanEmail,
           password,
           birthDate,
         }),
@@ -90,7 +129,6 @@ export default function SignUp() {
       const data = await res.json().catch(() => null);
 
       if (!res.ok) {
-        // backend renvoie 409 + message + field
         const msg =
           data?.message ||
           data?.error ||
@@ -130,8 +168,12 @@ export default function SignUp() {
           <input
             id="infosCompte"
             value={identifier}
-            onChange={(e) => setIdentifier(e.target.value)}
-            placeholder="ex: jason71"
+            onChange={(e) =>
+              setIdentifier(
+                e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '')
+              )
+            }
+            placeholder="ex: jason_71"
             autoComplete="username"
           />
         </label>
@@ -206,6 +248,9 @@ export default function SignUp() {
             placeholder="********"
             autoComplete="new-password"
           />
+          <p style={{ fontSize: '0.8rem', opacity: 0.75, margin: 0 }}>
+            8 caractères min, 1 majuscule, 1 minuscule, 1 chiffre
+          </p>
         </label>
 
         {/* Confirm */}
@@ -269,4 +314,6 @@ export default function SignUp() {
       </form>
     </div>
   );
-}
+};
+
+export default SignUp;
