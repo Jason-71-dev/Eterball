@@ -9,8 +9,14 @@ import { API_ORIGIN } from '@/services/apiOrigin';
 import Link from 'next/link';
 
 export default function SignUp() {
-  const [username, setUsername] = useState('');
-  const [usersurname, setUsersurname] = useState('');
+  // nouveaux champs
+  const [identifier, setIdentifier] = useState('');
+  const [firstName, setFirstName] = useState('');
+
+  // existants (renommés pour matcher le backend)
+  const [lastName, setLastName] = useState('');
+  const [pseudo, setPseudo] = useState('');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -18,7 +24,6 @@ export default function SignUp() {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
 
-  // ✅ NEW: UI messages + loading
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,14 +37,14 @@ export default function SignUp() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // ✅ reset messages
     setErrorMsg(null);
     setSuccessMsg(null);
 
     if (
-      !username ||
-      !usersurname ||
+      !identifier ||
+      !firstName ||
+      !lastName ||
+      !pseudo ||
       !email ||
       !password ||
       !confirmPassword ||
@@ -68,33 +73,27 @@ export default function SignUp() {
     try {
       setIsSubmitting(true);
 
-      const res = await fetch(`${API_ORIGIN}/signup`, {
+      const res = await fetch(`${API_ORIGIN}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          username,
-          surname: usersurname,
-          email,
+          identifier: identifier.trim(),
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          pseudo: pseudo.trim(),
+          email: email.trim().toLowerCase(),
           password,
           birthDate,
         }),
       });
 
-      // ✅ robust json parsing
       const data = await res.json().catch(() => null);
 
       if (!res.ok) {
-        // ✅ explicit duplicate email handling (backend should return 409)
-        if (res.status === 409) {
-          const msg = data?.message || 'Un compte avec cet email existe déjà.';
-          setErrorMsg(msg);
-          alert(msg);
-          return;
-        }
-
+        // backend renvoie 409 + message + field
         const msg =
-          data?.error ||
           data?.message ||
+          data?.error ||
           'Erreur lors de la création du compte';
         setErrorMsg(msg);
         alert(msg);
@@ -120,36 +119,66 @@ export default function SignUp() {
       <form onSubmit={handleSubmit} id="formSignUp">
         <h2 id="account">Créer un compte</h2>
 
-        {/* ✅ NEW: inline messages (optionnel, stylable via SCSS) */}
         {errorMsg && <p className="form-message error">{errorMsg}</p>}
         {successMsg && <p className="form-message success">{successMsg}</p>}
 
+        {/* Identifiant (login) */}
         <label>
           <div className="label-row">
-            Pseudo <span className="star">*</span>
+            Identifiant <span className="star">*</span>
           </div>
           <input
             id="infosCompte"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Ton pseudo"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            placeholder="ex: jason71"
             autoComplete="username"
           />
         </label>
 
+        {/* Prénom */}
+        <label>
+          <div className="label-row">
+            Prénom <span className="star">*</span>
+          </div>
+          <input
+            id="infosCompte"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            placeholder="Ton prénom"
+            autoComplete="given-name"
+          />
+        </label>
+
+        {/* Nom */}
         <label>
           <div className="label-row">
             Nom <span className="star">*</span>
           </div>
           <input
             id="infosCompte"
-            value={usersurname}
-            onChange={(e) => setUsersurname(e.target.value)}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             placeholder="Ton nom"
             autoComplete="family-name"
           />
         </label>
 
+        {/* Pseudo */}
+        <label>
+          <div className="label-row">
+            Pseudo <span className="star">*</span>
+          </div>
+          <input
+            id="infosCompte"
+            value={pseudo}
+            onChange={(e) => setPseudo(e.target.value)}
+            placeholder="Ton pseudo"
+            autoComplete="nickname"
+          />
+        </label>
+
+        {/* Email */}
         <label>
           <div className="label-row">
             Email <span className="star">*</span>
@@ -164,6 +193,7 @@ export default function SignUp() {
           />
         </label>
 
+        {/* MDP */}
         <label>
           <div className="label-row">
             Mot de passe <span className="star">*</span>
@@ -178,6 +208,7 @@ export default function SignUp() {
           />
         </label>
 
+        {/* Confirm */}
         <label>
           <div className="label-row">
             Confirmation <span className="star">*</span>
@@ -192,6 +223,7 @@ export default function SignUp() {
           />
         </label>
 
+        {/* Birthdate */}
         <label>
           <div className="label-row">
             Date de naissance <span className="star">*</span>
@@ -227,7 +259,6 @@ export default function SignUp() {
           </div>
         </label>
 
-        {/* ✅ NEW: disable while submitting */}
         <button type="submit" disabled={isSubmitting}>
           {isSubmitting ? 'Création...' : 'Créer mon compte'}
         </button>

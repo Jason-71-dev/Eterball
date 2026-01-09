@@ -31,7 +31,7 @@ const Login = () => {
     }
 
     try {
-      // ✅ nouvelle route
+      // nouvelle route
       const response = await fetch(`${API_ORIGIN}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -48,20 +48,20 @@ const Login = () => {
         return;
       }
 
-      // ✅ stockage token + user
+      // stockage token + user
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      // ✅ adapte au payload renvoyé par le backend
+      // adapte au payload renvoyé par le backend
       // backend renvoie: user { id, identifier, pseudo, email, balance }
       dispatch(
         login({
           token: data.token,
           user: {
             id: data.user.id,
-            name: data.user.pseudo || data.user.identifier, // ✅ affichage
+            name: data.user.pseudo || data.user.identifier, // affichage
             avatar: '/assets/Coupe_Casquette.png',
-            eter: data.user.balance ?? 0, // ✅ ton solde
+            eter: data.user.balance ?? 0,
           },
         })
       );
