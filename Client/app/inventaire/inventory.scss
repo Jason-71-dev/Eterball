@@ -1,4 +1,4 @@
-@use '../../styles/variables' as *;
+﻿@use '../../styles/variables' as *;
 
 #inventoryPage {
   min-height: 100vh;
@@ -160,6 +160,7 @@
   flex-direction: column;
 
   .item-img {
+    position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
     background: rgba(255, 255, 255, 0.04);
@@ -167,9 +168,7 @@
     align-items: center;
     justify-content: center;
 
-    img {
-      width: 100%;
-      height: 100%;
+    .item-img__image {
       object-fit: cover;
     }
   }
@@ -246,3 +245,6 @@
     filter: brightness(1.04);
   }
 }
+
+
+
