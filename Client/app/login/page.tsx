@@ -1,80 +1,66 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import "./login.scss";
-import { login } from "../store/auth/authSlice";
-import { RootState } from "../store/auth";
-import { API_ORIGIN } from "@/services/apiOrigin";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
+import './login.scss';
+import { login } from '../store/auth/authSlice';
+import { RootState } from '../store/auth';
+import { API_ORIGIN } from '@/services/apiOrigin';
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [blockedMsg, setBlockedMsg] = useState<string | null>(null);
 
-  // ✅ pour renvoi email si non vérifié
-  const [needsVerification, setNeedsVerification] = useState(false);
-  const [emailForResend, setEmailForResend] = useState("");
+  // resend UI
+  const [resendEmail, setResendEmail] = useState('');
   const [resendMsg, setResendMsg] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [resending, setResending] = useState(false);
 
   const router = useRouter();
-  const params = useSearchParams();
   const dispatch = useDispatch();
-
   const isConnected = useSelector((store: RootState) => store.auth.isConnected);
 
   useEffect(() => {
-    if (isConnected) router.replace("/");
+    if (isConnected) router.replace('/');
   }, [isConnected, router]);
-
-  // (optionnel) message après vérification email
-  useEffect(() => {
-    if (params.get("verified") === "true") {
-      setResendMsg("Email confirmé ✅ Tu peux te connecter.");
-    }
-  }, [params]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setBlockedMsg(null);
     setResendMsg(null);
-    setNeedsVerification(false);
 
     if (!username || !password) {
-      alert("Merci de remplir tous les champs!");
+      alert('Merci de remplir tous les champs!');
       return;
     }
 
     try {
-      setLoading(true);
-
       const response = await fetch(`${API_ORIGIN}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
 
-      // ✅ cas email non vérifié
-      if (response.status === 403) {
-        const err = await response.json().catch(() => ({}));
-        setNeedsVerification(true);
-        setResendMsg(
-          err?.error || "Merci de confirmer ton email avant de te connecter."
-        );
-        return;
-      }
+      const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        alert(err?.error || "Erreur lors de la connexion");
+        const errMsg = data?.error || 'Erreur lors de la connexion';
+
+        // ✅ cas email non vérifié
+        if (response.status === 403) {
+          setBlockedMsg(errMsg);
+          return;
+        }
+
+        alert(errMsg);
         return;
       }
 
-      const data = await response.json();
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
 
       dispatch(
         login({
@@ -82,48 +68,47 @@ const Login = () => {
           user: {
             id: data.user.id,
             name: data.user.username,
-            avatar: "/assets/Coupe_Casquette.png",
+            avatar: '/assets/Coupe_Casquette.png',
             eter: data.user.eter ?? 0,
           },
         })
       );
 
-      router.push("/");
+      router.push('/');
     } catch (err) {
       console.error(err);
-      alert("Erreur serveur");
-    } finally {
-      setLoading(false);
+      alert('Erreur serveur');
     }
   };
 
-  const handleResendVerification = async () => {
+  const handleResend = async () => {
     setResendMsg(null);
 
-    if (!emailForResend) {
-      setResendMsg("Entre ton email pour renvoyer le lien de confirmation.");
+    if (!resendEmail.trim()) {
+      setResendMsg("Entre l'email utilisé à l'inscription.");
       return;
     }
 
     try {
+      setResending(true);
       const res = await fetch(`${API_ORIGIN}/resend-verification`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: emailForResend }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: resendEmail.trim().toLowerCase() }),
       });
 
-      const data = await res.json().catch(() => ({}));
+      const data = await res.json().catch(() => null);
 
       if (!res.ok) {
-        setResendMsg(data?.error || "Erreur lors du renvoi.");
+        setResendMsg(data?.error || 'Impossible de renvoyer le mail.');
         return;
       }
 
-      setResendMsg(
-        data?.message || "Si un compte existe, un email a été renvoyé."
-      );
+      setResendMsg(data?.message || 'Email renvoyé ✅');
     } catch (e) {
-      setResendMsg("Erreur réseau.");
+      setResendMsg('Erreur réseau.');
+    } finally {
+      setResending(false);
     }
   };
 
@@ -134,13 +119,12 @@ const Login = () => {
 
         <label>
           <div className="label-row">
-            Nom de compte <span className="star">*</span>
+            Nom d&apos;utilisateur <span className="star">*</span>
           </div>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            autoComplete="username"
           />
         </label>
 
@@ -152,39 +136,39 @@ const Login = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
           />
         </label>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Connexion…" : "Se connecter"}
-        </button>
+        <button type="submit">Se connecter</button>
 
-        {/*  section qui apparaît seulement si email non vérifié */}
-        {needsVerification && (
-          <div style={{ width: "100%", marginTop: 12 }}>
-            <label>
-              <div className="label-row">
-                Email <span className="star">*</span>
-              </div>
+        {blockedMsg && (
+          <div style={{ width: 300, marginTop: 10 }}>
+            <p style={{ margin: 0 }}>{blockedMsg}</p>
+
+            <div style={{ marginTop: 10 }}>
               <input
                 type="email"
-                value={emailForResend}
-                onChange={(e) => setEmailForResend(e.target.value)}
-                autoComplete="email"
+                placeholder="Ton email d'inscription"
+                value={resendEmail}
+                onChange={(e) => setResendEmail(e.target.value)}
+                style={{
+                  width: '100%',
+                  borderRadius: 12,
+                  height: 36,
+                  paddingInline: 10,
+                }}
               />
-            </label>
-
-            <button type="button" onClick={handleResendVerification}>
-              Renvoyer l’email de confirmation
-            </button>
+              <button
+                type="button"
+                onClick={handleResend}
+                disabled={resending}
+                style={{ width: '100%', marginTop: 10 }}
+              >
+                {resending ? 'Envoi…' : 'Renvoyer le mail de confirmation'}
+              </button>
+              {resendMsg && <p style={{ marginTop: 8 }}>{resendMsg}</p>}
+            </div>
           </div>
-        )}
-
-        {resendMsg && (
-          <p style={{ marginTop: 10, opacity: 0.95, textAlign: "center" }}>
-            {resendMsg}
-          </p>
         )}
 
         <p>

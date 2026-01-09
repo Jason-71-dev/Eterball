@@ -1,68 +1,55 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { API_ORIGIN } from "@/services/apiOrigin";
+import { useEffect, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { API_ORIGIN } from '@/services/apiOrigin';
 
 export default function VerifyPage() {
   const params = useSearchParams();
   const router = useRouter();
-  const token = params.get("token");
+  const token = params.get('token');
 
-  const [msg, setMsg] = useState("Vérification en cours…");
-  const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
-  );
+  const [msg, setMsg] = useState('Vérification en cours…');
 
   useEffect(() => {
-    if (!token) {
-      setStatus("error");
-      setMsg("Token manquant.");
-      return;
-    }
+    let cancelled = false;
 
     (async () => {
+      if (!token) {
+        if (!cancelled) setMsg('Token manquant.');
+        return;
+      }
+
       try {
         const res = await fetch(
           `${API_ORIGIN}/verify-email?token=${encodeURIComponent(token)}`,
-          { cache: "no-store" }
+          { cache: 'no-store' }
         );
 
         const data = await res.json().catch(() => null);
 
         if (!res.ok) {
-          setStatus("error");
-          setMsg(data?.message ?? "Lien invalide ou expiré.");
+          if (!cancelled) setMsg(data?.message ?? 'Lien invalide ou expiré.');
           return;
         }
 
-        setStatus("success");
-        setMsg("Email vérifié ✅ Redirection vers la connexion…");
-
-        setTimeout(() => {
-          router.push("/login?verified=true");
-        }, 1200);
+        if (!cancelled) {
+          setMsg('Email vérifié ✅ Redirection vers la connexion…');
+          setTimeout(() => router.push('/login?verified=true'), 1200);
+        }
       } catch {
-        setStatus("error");
-        setMsg("Erreur réseau.");
+        if (!cancelled) setMsg('Erreur réseau.');
       }
     })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [token, router]);
 
   return (
-    <div style={{ paddingTop: 120, paddingInline: 16, textAlign: "center" }}>
-      <h2
-        style={{
-          color:
-            status === "success"
-              ? "#22c55e"
-              : status === "error"
-              ? "#ef4444"
-              : "inherit",
-        }}
-      >
-        {msg}
-      </h2>
+    <div style={{ paddingTop: 120, paddingInline: 16, textAlign: 'center' }}>
+      <h2>{msg}</h2>
     </div>
   );
 }
