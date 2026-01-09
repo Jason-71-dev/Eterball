@@ -29,7 +29,7 @@ const useAuth = () => {
               id: user.id,
               name: user.username,
               avatar: user.avatar || '/assets/Coupe_Casquette.png',
-              eter: user.eter ?? 0,
+              eter: user.balance ?? 0,
             },
           })
         );
