@@ -99,4 +99,35 @@
     font-size: 1rem;
     font-family: $Text;
   }
+
+  /* Messages formulaire (erreur / succès) */
+  .form-message {
+    width: min(350px, 100%);
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-family: $Text;
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .form-message.error {
+    background-color: rgba(255, 80, 80, 0.15);
+    color: #ffb3b3;
+    border: 1px solid rgba(255, 80, 80, 0.4);
+  }
+
+  .form-message.success {
+    background-color: rgba(80, 200, 120, 0.15);
+    color: #b6f5cd;
+    border: 1px solid rgba(80, 200, 120, 0.4);
+  }
+
+  /* Bouton désactivé (submit en cours) */
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
 }

@@ -3,19 +3,24 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.JWT_SECRET;
 
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
-
-  if (!token) {
-    return res.status(401).json({ error: 'Token manquant' });
+  if (!SECRET_KEY) {
+    console.error('JWT_SECRET manquant');
+    return res.status(500).json({ error: 'Configuration serveur invalide' });
   }
 
-  jwt.verify(token, SECRET_KEY, (err, user) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Accès non autorisé' });
+  }
+
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
     if (err) {
-      // Le token est expiré ou invalide
-      return res.status(403).json({ error: 'Token expiré ou invalide' });
+      return res.status(401).json({ error: 'Accès non autorisé' });
     }
-    req.user = user;
+
+    req.user = decoded;
     next();
   });
 };
