@@ -64,10 +64,10 @@ const InventoryPage = () => {
         </div>
 
         <div className="header-right">
-          <Link className="btn-ghost" href="/account">
+          <Link className="btn-ghost" href="/compte">
             Retour compte
           </Link>
-          <Link className="btn-gold" href="/shop">
+          <Link className="btn-gold" href="/boutique">
             Aller a la boutique
           </Link>
         </div>
