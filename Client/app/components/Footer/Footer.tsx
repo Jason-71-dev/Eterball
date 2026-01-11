@@ -98,7 +98,7 @@ const Footer = () => {
           />
           <p>
             2025 Eterball. Tous droits réservés.{' '}
-            <Link href="/conditons-utilisation">
+            <Link href="/conditions-utilisation">
               Conditions d&apos;utilisations
             </Link>{' '}
             -<Link href="/confidentialite">Politique de confidentialité</Link> -{' '}

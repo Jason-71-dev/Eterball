@@ -265,7 +265,7 @@
     margin: 10px 0 0px 0;
     padding: 0px;
     border-radius: 8px;
-    background: rgb(43, 43, 43);
+
     #actus {
       flex-direction: column;
       gap: 20px;
@@ -406,12 +406,46 @@
     z-index: -1;
   }
   #classes {
+    position: relative;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
     width: 100%;
     align-items: center;
+
+    .arrow {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: none;
+      background: $button-color;
+      color: $text-color;
+      font-size: 26px;
+      font-weight: bold;
+      cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .arrow:hover {
+      transform: scale(1.1);
+    }
+
+    .arrow:active {
+      transform: scale(0.95);
+    }
   }
+
+  #personnages {
+    display: flex;
+    align-items: center;
+  }
+
   #personnage {
     z-index: 1;
   }
@@ -423,7 +457,8 @@
       text-align: center;
       font-family: $Text;
       font-size: 1.3rem;
-      background-color: #36353580;
+      background-color: #36353552;
+      border-radius: 8px;
     }
 
     button#pageJoueurs {

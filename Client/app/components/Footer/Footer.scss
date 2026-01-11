@@ -35,7 +35,7 @@
   &__top {
     display: flex;
     justify-content: space-evenly;
-
+    flex-wrap: wrap;
     gap: 2rem;
     margin-bottom: 2rem;
   }
