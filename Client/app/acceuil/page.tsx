@@ -4,28 +4,44 @@ import Image from 'next/image';
 import './accueil.scss';
 import { useState } from 'react';
 import Link from 'next/link';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
 const Acceuil = () => {
   const classesData = [
     {
       id: 'milieu',
       name: 'Milieu de terrain',
-      image: '/Milieu.png',
+      image: '/Milieu_class.png',
       description:
         'Le milieu de terrain est le cœur du jeu, véritable lien entre la défense et l’attaque. Polyvalent et stratège, il dicte le rythme du match.',
     },
     {
       id: 'attaquant',
       name: 'Attaquant',
-      image: '/Ailier_caroussel.png',
+      image: '/Attaquant_class.png',
       description:
         'L’attaquant est le finisseur. Rapide, précis et audacieux, il peut changer le cours de ton match en transformant la moindre occasion en but.',
     },
     {
+      id: 'ailier',
+      name: 'Ailier',
+      image: '/Ailier_class.png',
+      description:
+        'L’ailier est un joueur agile et rapide, capable de déstabiliser les défenses adverses grâce à son maniement précis et ses mouvements rapides.',
+    },
+    {
       id: 'defenseur',
       name: 'Défenseur',
-      image: '/Defenseur_caroussel.png',
+      image: '/Defenseur_class.png',
       description:
         'Pilier de l’équipe, le défenseur protège son camp, anticipe les attaques adverses et relance proprement. Il peut sauver la mise à tout moment.',
+    },
+    {
+      id: 'gardien',
+      name: 'Gardien de but',
+      image: '/Gardien_class.png',
+      description:
+        'Le gardien de but est le dernier rempart de l’équipe. Agile et réactif, il doit faire preuve de sang-froid pour repousser les tirs adverses et garder sa cage inviolée.',
     },
   ];
 
@@ -65,34 +81,43 @@ const Acceuil = () => {
           <div id="img-actus">
             <h2>Actus et Nouveautés</h2>
             <div id="img-actus-container">
-              <Image
-                id="img-dragons"
-                src="/TeamDragons.png"
-                alt="Team Dragons"
-                width={250}
-                height={180}
-              />
-              <Image
-                id="img-dragonStadium"
-                src="/DragonFlame_Stadium.png"
-                alt="Team Dragons"
-                width={250}
-                height={180}
-              />
-              <Image
-                id="img-teamDepart"
-                src="/Team_depart.png"
-                alt="Team Dragons"
-                width={250}
-                height={180}
-              />
-              <Image
-                id="img-trainAgility"
-                src="/Entrainement_agilite1.png"
-                alt="Team Dragons"
-                width={250}
-                height={180}
-              />
+              <Link href="/actus/les-dragons-debarquent">
+                <Image
+                  id="img-dragons"
+                  src="/TeamDragons.png"
+                  alt="Team Dragons"
+                  width={250}
+                  height={180}
+                />
+              </Link>
+              <Link href="/actus/dragonflame-stadium">
+                <Image
+                  id="img-dragonStadium"
+                  src="/DragonFlame_Stadium.png"
+                  alt="Team Dragons"
+                  width={250}
+                  height={180}
+                />
+              </Link>
+
+              <Link href="/actus/creer-ton-equipe">
+                <Image
+                  id="img-teamDepart"
+                  src="/Team_depart.png"
+                  alt="Team Dragons"
+                  width={250}
+                  height={180}
+                />
+              </Link>
+              <Link href="/actus/augmenter-son-agilite">
+                <Image
+                  id="img-trainAgility"
+                  src="/Entrainement_agilite1.png"
+                  alt="Team Dragons"
+                  width={250}
+                  height={180}
+                />
+              </Link>
             </div>
           </div>
           <div id="events">
@@ -105,7 +130,9 @@ const Acceuil = () => {
                 width={400}
                 height={330}
               />
-              <button id="event-btn">Affrontez-les !</button>
+              <Link href="/actus/dragonflame-stadium">
+                <button id="event-btn">Affrontez-les !</button>
+              </Link>
             </div>
           </div>
         </div>
@@ -143,8 +170,12 @@ const Acceuil = () => {
         <div id="classes">
           {/* IMAGE */}
           <div id="personnages">
-            <button className="arrow left" onClick={prevClass}>
-              ‹
+            <button
+              className="arrow arrow-left"
+              onClick={prevClass}
+              aria-label="Précédent"
+            >
+              <ChevronLeft size={24} />
             </button>
 
             <Image
@@ -156,8 +187,12 @@ const Acceuil = () => {
               priority
             />
 
-            <button className="arrow right" onClick={nextClass}>
-              ›
+            <button
+              className="arrow arrow-right"
+              onClick={nextClass}
+              aria-label="Suivant"
+            >
+              <ChevronRight size={24} />
             </button>
           </div>
 
@@ -167,7 +202,9 @@ const Acceuil = () => {
 
             <p id="description">{currentClass.description}</p>
 
-            <button id="pageJoueurs">Voir toutes les classes</button>
+            <Link href="/classes">
+              <button id="pageJoueurs">Voir toutes les classes</button>
+            </Link>
           </div>
         </div>
       </section>

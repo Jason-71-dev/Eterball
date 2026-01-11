@@ -5,7 +5,7 @@ const File_Url = '/Eterball.png';
 
 const download = () => {
   return (
-    <section id="download-hero">
+    <main id="download-hero">
       <div id="title">
         <h1>
           Eterball{' '}
@@ -50,7 +50,7 @@ const download = () => {
           />
         </a>
       </div>
-    </section>
+    </main>
   );
 };
 export default download;
