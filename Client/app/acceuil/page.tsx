@@ -6,6 +6,33 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+const actusData = [
+  {
+    href: '/actus/les-dragons-debarquent',
+    src: '/TeamDragons.png',
+    alt: 'Team Dragons',
+    id: 'img-dragons',
+  },
+  {
+    href: '/actus/dragonflame-stadium',
+    src: '/DragonFlame_Stadium.png',
+    alt: 'DragonFlame Stadium',
+    id: 'img-dragonStadium',
+  },
+  {
+    href: '/actus/creer-ton-equipe',
+    src: '/Team_depart.png',
+    alt: 'Créer ton équipe',
+    id: 'img-teamDepart',
+  },
+  {
+    href: '/actus/augmenter-son-agilite',
+    src: '/Entrainement_agilite1.png',
+    alt: 'Entraînement Agilité',
+    id: 'img-trainAgility',
+  },
+];
+
 type GameClass = {
   _id?: string;
   name: string;
@@ -103,44 +130,19 @@ const Acceuil = () => {
         <div id="actus">
           <div id="img-actus">
             <h2>Actus et Nouveautés</h2>
-            <div id="img-actus-container">
-              <Link href="/actus/les-dragons-debarquent">
-                <Image
-                  id="img-dragons"
-                  src="/TeamDragons.png"
-                  alt="Team Dragons"
-                  width={250}
-                  height={180}
-                />
-              </Link>
-              <Link href="/actus/dragonflame-stadium">
-                <Image
-                  id="img-dragonStadium"
-                  src="/DragonFlame_Stadium.png"
-                  alt="Team Dragons"
-                  width={250}
-                  height={180}
-                />
-              </Link>
 
-              <Link href="/actus/creer-ton-equipe">
-                <Image
-                  id="img-teamDepart"
-                  src="/Team_depart.png"
-                  alt="Team Dragons"
-                  width={250}
-                  height={180}
-                />
-              </Link>
-              <Link href="/actus/augmenter-son-agilite">
-                <Image
-                  id="img-trainAgility"
-                  src="/Entrainement_agilite1.png"
-                  alt="Team Dragons"
-                  width={250}
-                  height={180}
-                />
-              </Link>
+            <div className="img-actus-container">
+              {actusData.map((actus) => (
+                <Link key={actus.href} href={actus.href}>
+                  <Image
+                    id={actus.id}
+                    src={actus.src}
+                    alt={actus.alt}
+                    width={250}
+                    height={180}
+                  />
+                </Link>
+              ))}
             </div>
           </div>
 
@@ -204,7 +206,7 @@ const Acceuil = () => {
             </button>
 
             {loadingClasses ? (
-              // Petit placeholder simple (évite un crash pendant le chargement)
+              // placeholder simple (évite un crash pendant le chargement)
               <div
                 id="personnage"
                 style={{ width: 220, height: 320, display: 'block' }}
@@ -265,7 +267,7 @@ const Acceuil = () => {
                 : currentClass?.name ?? 'Classe'}
             </h2>
 
-            <p id="description">
+            <p className="description">
               {loadingClasses
                 ? ''
                 : currentClass?.description?.trim()

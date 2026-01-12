@@ -3,7 +3,9 @@
 #shop {
   margin-top: 140px;
 }
-
+#title-shop {
+  text-align: center;
+}
 #shop-section.shop-layout {
   padding: 0 12px;
   display: grid;
@@ -197,25 +199,12 @@
   background: $secondary-background;
   transform: translateX(-100%);
   transition: transform 0.25s;
-  z-index: 70;
+  z-index: 10000;
   display: flex;
   flex-direction: column;
 
   &.open {
     transform: translateX(0);
-  }
-  .drawer-header h2 {
-    all: unset; // reset complet des styles hérités
-    display: block;
-
-    font-family: $Title;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: $text-color;
-
-    margin: 0;
-    padding: 0;
-    line-height: 1.2;
   }
 
   .drawer-header {
@@ -231,10 +220,6 @@
       font-size: 1.2rem;
       cursor: pointer;
       color: $text-color;
-
-      &:hover {
-        background: $text-color;
-      }
     }
   }
 
@@ -297,6 +282,9 @@
 }
 
 @media (max-width: 768px) {
+  h1 {
+    font-size: 2.5rem;
+  }
   #shop-section.shop-layout {
     grid-template-columns: 1fr;
   }
