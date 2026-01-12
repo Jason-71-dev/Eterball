@@ -276,7 +276,27 @@ nav.hors-connexion {
     width: 90%;
     margin-bottom: 12px;
   }
+  .menus.open ul.menu > li.nav-link a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
+    padding: 8px 20px;
+    letter-spacing: 3px;
+
+    font-weight: 500;
+    font-size: 1.5rem;
+
+    background-color: rgba(80, 80, 80, 0.8);
+    border-radius: 5px;
+
+    text-decoration: none;
+    color: $text-color;
+  }
+
+  .menus.open ul.menu > li.nav-link a:hover {
+    background-color: rgba(60, 60, 60, 0.8);
+  }
   /* DÉSACTIVER LE HOVER SUR MOBILE */
   .dropdown:hover .dropdown-menu {
     display: none;

@@ -198,7 +198,7 @@ const Navbar: FC = () => {
               </ul>
             </li>
 
-            {/* BOUTIQUE simple (pas de dropdown, plus de 404) */}
+            {/* BOUTIQUE simple */}
             <li className="nav-link">
               <Link href="/boutique" onClick={closeMenu}>
                 Boutique

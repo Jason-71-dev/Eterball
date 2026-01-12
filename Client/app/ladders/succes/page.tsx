@@ -10,7 +10,7 @@ const Ladders = () => {
       <section id="laddersGeneral">
         <article id="general">
           <div id="title">
-            <h2>Ladder général</h2>
+            <h2>Ladder succès</h2>
             <ul className="ladderNavigation">
               <Link href="/ladders/general">
                 <li>GÉNÉRAL</li>

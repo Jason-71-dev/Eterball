@@ -3,8 +3,80 @@
 import Image from 'next/image';
 import './general.scss';
 import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
+
+type LadderGeneralRow = {
+  rank: number;
+  pseudo: string;
+  class: string;
+  server: string;
+  level: number;
+  matches: number;
+  avatarURL?: string; // si tu le rajoutes dans populate plus tard
+};
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
 
 const Ladders = () => {
+  const [server, setServer] = useState('Dragos');
+  const [query, setQuery] = useState('');
+
+  const [rows, setRows] = useState<LadderGeneralRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchLadder = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const url = `${API_URL}/api/ladders/general?server=${encodeURIComponent(
+          server
+        )}&season=1&page=1&limit=100`;
+
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
+        const json = await res.json();
+        const data: LadderGeneralRow[] = Array.isArray(json?.data)
+          ? json.data
+          : [];
+
+        if (!cancelled) setRows(data);
+      } catch (e) {
+        if (!cancelled) {
+          setError(
+            e instanceof Error ? e.message : 'Impossible de charger le ladder.'
+          );
+          setRows([]);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    fetchLadder();
+    return () => {
+      cancelled = true;
+    };
+  }, [server]);
+
+  const filteredRows = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return rows;
+
+    return rows.filter((r) => {
+      const pseudo = (r.pseudo ?? '').toLowerCase();
+      const cls = (r.class ?? '').toLowerCase();
+      return pseudo.includes(q) || cls.includes(q);
+    });
+  }, [rows, query]);
+
   return (
     <div>
       <section id="laddersGeneral">
@@ -46,181 +118,96 @@ const Ladders = () => {
                 <th className="game">Matchs</th>
               </tr>
             </thead>
+
             <tbody>
-              <tr>
-                <td className="rank">1</td>
-                <td>
-                  <Image
-                    src="/Miniature_Milieu.png"
-                    alt="Nagaa"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Nagaa
-                </td>
-                <td className="class">Milieu</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">100 GEN</td>
-                <td className="game">2 500</td>
-              </tr>
-              <tr>
-                <td className="rank">2</td>
-                <td>
-                  <Image
-                    src="/Miniature_Ailier.png"
-                    alt="Poweur-Aizen"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Poweur-Aizen
-                </td>
-                <td className="class">Ailier</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">99 GEN</td>
-                <td className="game">2 432</td>
-              </tr>
-              <tr>
-                <td className="rank">3</td>
-                <td>
-                  <Image
-                    src="/Miniature_AT.png"
-                    alt="Luigy"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Luigy
-                </td>
-                <td className="class">Attaquant</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">98 GEN</td>
-                <td className="game">2 396</td>
-              </tr>
-              <tr>
-                <td className="rank">4</td>
-                <td>
-                  <Image
-                    src="/Miniature_AT.png"
-                    alt="Fastlearner"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Fastlearner
-                </td>
-                <td className="class">Attaquant</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">98 GEN</td>
-                <td className="game">2 355</td>
-              </tr>
-              <tr>
-                <td className="rank">5</td>
-                <td>
-                  <Image
-                    src="/Miniature_Milieu.png"
-                    alt="Zeyrox"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Zeyrox
-                </td>
-                <td className="class">Gardien</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">98 GEN</td>
-                <td className="game">2 326</td>
-              </tr>
-              <tr>
-                <td className="rank">6</td>
-                <td>
-                  <Image
-                    src="/Miniature_AilierF.png"
-                    alt="Satsuki71"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Satsuki71
-                </td>
-                <td className="class">Ailière</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">96 GEN</td>
-                <td className="game">2 058</td>
-              </tr>
-              <tr>
-                <td className="rank">7</td>
-                <td>
-                  <Image
-                    src="/Miniature_AT2.png"
-                    alt="Hypernova-Gbx"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Hypernova-Gbx
-                </td>
-                <td className="class">Attaquant</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">94 GEN</td>
-                <td className="game">1 992</td>
-              </tr>
-              <tr>
-                <td className="rank">8</td>
-                <td>
-                  <Image
-                    src="/Miniature_Milieu.png"
-                    alt="Le-H"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Le-H
-                </td>
-                <td className="class">Milieu</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">92 GEN</td>
-                <td className="game">1 765</td>
-              </tr>
-              <tr>
-                <td className="rank">9</td>
-                <td>
-                  <Image
-                    src="/Miniature_AilierF.png"
-                    alt="Waiss"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Collagene
-                </td>
-                <td className="class">Ailière</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">91 GEN</td>
-                <td className="game">1 699</td>
-              </tr>
-              <tr>
-                <td className="rank">10</td>
-                <td>
-                  <Image
-                    src="/Miniature_Def.png"
-                    alt="Xefreh"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Xefreh
-                </td>
-                <td className="class">Défenseur</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">91 GEN</td>
-                <td className="game">1 651</td>
-              </tr>
+              {loading && (
+                <tr>
+                  <td className="rank">-</td>
+                  <td>Chargement…</td>
+                  <td className="class">-</td>
+                  <td className="server">{server}</td>
+                  <td className="lvl">-</td>
+                  <td className="game">-</td>
+                </tr>
+              )}
+
+              {!loading && error && (
+                <tr>
+                  <td className="rank">-</td>
+                  <td>Erreur: {error}</td>
+                  <td className="class">-</td>
+                  <td className="server">{server}</td>
+                  <td className="lvl">-</td>
+                  <td className="game">-</td>
+                </tr>
+              )}
+
+              {!loading && !error && filteredRows.length === 0 && (
+                <tr>
+                  <td className="rank">-</td>
+                  <td>Aucun résultat</td>
+                  <td className="class">-</td>
+                  <td className="server">{server}</td>
+                  <td className="lvl">-</td>
+                  <td className="game">-</td>
+                </tr>
+              )}
+
+              {!loading &&
+                !error &&
+                filteredRows.map((row) => (
+                  <tr key={`${row.rank}-${row.pseudo}`}>
+                    <td className="rank">{row.rank}</td>
+                    <td>
+                      {/* Avatar : pour l’instant fallback sur une image fixe.
+                          Dès que tu stockes avatarURL côté User + populate, remplace src ici */}
+                      <Image
+                        src={row.avatarURL || '/Miniature_Milieu.png'}
+                        alt={row.pseudo}
+                        width={50}
+                        height={50}
+                      />
+                      &nbsp;{row.pseudo}
+                    </td>
+                    <td className="class">{row.class}</td>
+                    <td className="server">{row.server}</td>
+                    <td className="lvl">{row.level} GEN</td>
+                    <td className="game">
+                      {row.matches.toLocaleString('fr-FR')}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </article>
+
         <div id="filtre">
           <h2>Filtrer la liste</h2>
+
           <div id="server">
             <p className="category">Server</p>
             <p>
-              <small>Dragos</small>
+              {/* Je garde ta structure (p/small) mais je rends ça interactif */}
+              <small>{server}</small>
             </p>
+
+            {/* si tu as déjà du CSS qui n’aime pas les <select>, tu peux le laisser,
+                sinon tu peux styliser ce select plus tard */}
+            <select value={server} onChange={(e) => setServer(e.target.value)}>
+              <option value="Dragos">Dragos</option>
+              {/* Ajoute tes serveurs ici */}
+              {/* <option value="Astra">Astra</option> */}
+            </select>
           </div>
+
           <div id="search">
             <p className="category">Recherche</p>
-            <input type="text" placeholder="Rechercher" />
+            <input
+              type="text"
+              placeholder="Rechercher"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
           </div>
         </div>
       </section>
