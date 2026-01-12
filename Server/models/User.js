@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
-    // ✅ mdp hashé
+    //  mdp hashé
     password: { type: String, required: true },
 
     birthDate: { type: Date, required: true },

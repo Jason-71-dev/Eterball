@@ -40,24 +40,24 @@
     text-align: center;
   }
 
-  #joueur1,
-  #joueur2 {
+  .joueur1,
+  .joueur2 {
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
   }
 
-  #general {
+  .general {
     text-align: center;
     background-color: $secondary-background;
     width: 450px;
     height: 800px;
     margin: 120px auto 30px auto;
   }
-  #classement {
+  .classement {
     display: flex;
     justify-content: space-between;
   }
 
-  #players {
+  .players {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -71,15 +71,15 @@
     justify-content: space-evenly;
     text-align: center;
   }
-  #statPlayer {
+  .statPlayer {
     padding-right: 10px;
   }
   hr {
     color: rgba(255, 255, 255, 0.5);
   }
-  #buttonClassement {
+  .buttonClassement {
     text-align: center;
-    #voir-classement {
+    .voir-classement {
       padding: 10px 20px;
       font-size: 1.3rem;
       transition: 0.2s ease;

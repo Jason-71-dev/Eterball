@@ -166,7 +166,7 @@ const SignUp = () => {
             Identifiant <span className="star">*</span>
           </div>
           <input
-            id="infosCompte"
+            className="infosCompte"
             value={identifier}
             onChange={(e) =>
               setIdentifier(
@@ -184,7 +184,7 @@ const SignUp = () => {
             Prénom <span className="star">*</span>
           </div>
           <input
-            id="infosCompte"
+            className="infosCompte"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             placeholder="Ton prénom"
@@ -198,7 +198,7 @@ const SignUp = () => {
             Nom <span className="star">*</span>
           </div>
           <input
-            id="infosCompte"
+            className="infosCompte"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             placeholder="Ton nom"
@@ -212,7 +212,7 @@ const SignUp = () => {
             Pseudo <span className="star">*</span>
           </div>
           <input
-            id="infosCompte"
+            className="infosCompte"
             value={pseudo}
             onChange={(e) => setPseudo(e.target.value)}
             placeholder="Ton pseudo"
@@ -226,7 +226,7 @@ const SignUp = () => {
             Email <span className="star">*</span>
           </div>
           <input
-            id="infosCompte"
+            className="infosCompte"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -241,7 +241,7 @@ const SignUp = () => {
             Mot de passe <span className="star">*</span>
           </div>
           <input
-            id="infosCompte"
+            className="infosCompte"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -259,7 +259,7 @@ const SignUp = () => {
             Confirmation <span className="star">*</span>
           </div>
           <input
-            id="infosCompte"
+            className="infosCompte"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -275,7 +275,7 @@ const SignUp = () => {
           </div>
           <div id="age">
             <input
-              id="date"
+              className="date"
               value={day}
               onChange={(e) =>
                 setDay(e.target.value.replace(/\D/g, '').slice(0, 2))
@@ -284,7 +284,7 @@ const SignUp = () => {
               inputMode="numeric"
             />
             <input
-              id="date"
+              className="date"
               value={month}
               onChange={(e) =>
                 setMonth(e.target.value.replace(/\D/g, '').slice(0, 2))
@@ -293,7 +293,7 @@ const SignUp = () => {
               inputMode="numeric"
             />
             <input
-              id="date"
+              className="date"
               value={year}
               onChange={(e) =>
                 setYear(e.target.value.replace(/\D/g, '').slice(0, 4))
