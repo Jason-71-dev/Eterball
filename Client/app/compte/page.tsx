@@ -38,6 +38,7 @@ const AccountPage = () => {
           <div className="account-grid">
             {/* Informations de compte */}
             <section className="card" aria-label="Informations de compte">
+              <div className="card-title sub">Information du compte</div>
               <div className="card-body">
                 <div className="row">
                   <div className="label">Adresse e-mail</div>
@@ -69,6 +70,7 @@ const AccountPage = () => {
 
             {/* Booster et paiement */}
             <section className="card" aria-label="Booster et paiement">
+              <div className="card-title sub">Booster</div>
               <div className="card-body">
                 <p className="muted">
                   Temps restant du booster
@@ -83,7 +85,7 @@ const AccountPage = () => {
               </div>
 
               <div className="card-divider" />
-
+              <div className="card-title sub">Historique d'achats</div>
               <div className="card-body">
                 <p className="muted">
                   Consulter l&apos;historique de vos achats.
@@ -101,6 +103,7 @@ const AccountPage = () => {
 
             {/* Sécurité / Inventaire / Personnages */}
             <section className="card" aria-label="Sécurité et gestion">
+              <div className="card-title sub">Mot de passe</div>
               <div className="card-body">
                 <p className="muted">
                   Vous pouvez modifier votre mot de passe à tout moment.
@@ -127,8 +130,8 @@ const AccountPage = () => {
               </div>
 
               <div className="card-actions">
-                <Link className="btn-secondary link-btn" href="/inventaire">
-                  Voir mon inventaire
+                <Link href="/inventaire">
+                  <button className="btn-secondary">Voir mon inventaire</button>
                 </Link>
               </div>
 
