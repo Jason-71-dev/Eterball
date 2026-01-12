@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.js');
+const UserStats = require('../models/UserStats'); // ✅ AJOUT
 
 // Helpers
 function normalizeEmail(email) {
@@ -62,7 +63,6 @@ router.post('/signup', async (req, res) => {
     });
 
     if (existing) {
-      // on renvoie un message précis si possible
       if (existing.identifier === cleanIdentifier) {
         return res.status(409).json({
           message: 'Identifiant déjà utilisé',
@@ -97,9 +97,27 @@ router.post('/signup', async (req, res) => {
       password: hashedPassword,
       birthDate: new Date(birthDate),
       // balance et inventory ont des defaults
+      // avatarURL a un default '' si tu l'as ajouté au model
     });
 
     await newUser.save();
+
+    // ✅ AJOUT : créer les stats par défaut (anti-doublon via upsert)
+    await UserStats.findOneAndUpdate(
+      { user: newUser._id },
+      {
+        $setOnInsert: {
+          user: newUser._id,
+          server: 'Dragos', // 🔴 change si tu as un choix de serveur au signup
+          class: 'Milieu', // 🔴 change si tu as un choix de classe au signup
+          levelGen: 1,
+          matches: 0,
+          successPoints: 0,
+          season: 1,
+        },
+      },
+      { upsert: true, new: true }
+    );
 
     return res.status(201).json({
       message: 'Compte créé avec succès',
@@ -113,7 +131,6 @@ router.post('/signup', async (req, res) => {
   } catch (err) {
     console.error('Erreur signup:', err);
 
-    // ✅ sécurité si index unique déclenche E11000
     if (err?.code === 11000) {
       const key = Object.keys(err.keyPattern || {})[0];
       const field = key || 'unknown';
