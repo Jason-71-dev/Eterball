@@ -9,6 +9,8 @@ dotenv.config();
 const authRoutes = require('./routes/auth'); // nouveau fichier unique
 const shopRoutes = require('./routes/shop');
 const classesRoutes = require('./routes/classes');
+const laddersRoutes = require('./routes/ladders');
+const statsRoutes = require('./routes/stats');
 const PORT = process.env.PORT || 5000;
 const app = express();
 
@@ -44,6 +46,8 @@ app.get('/health', (req, res) => res.status(200).send('ok'));
 app.use('/auth', authRoutes); // POST /auth/signup | POST /auth/login
 app.use('/shop', shopRoutes);
 app.use('/api', classesRoutes);
+app.use('/api/ladders', laddersRoutes);
+app.use('/api/stats', statsRoutes);
 
 // Mongo
 console.log('Tentative de connexion MongoDB...');

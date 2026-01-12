@@ -47,7 +47,12 @@ const userSchema = new mongoose.Schema(
 
     // inventaire du joueur
     inventory: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }],
+    avatarURL: {
+      type: String,
+      default: '', // important
+    },
   },
+
   { timestamps: true }
 );
 
