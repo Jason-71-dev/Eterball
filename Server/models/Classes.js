@@ -39,6 +39,7 @@ const classSchema = new mongoose.Schema(
     description: {
       type: String,
       maxlength: 500,
+      default: '',
     },
 
     difficulty: {

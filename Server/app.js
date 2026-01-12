@@ -9,7 +9,6 @@ dotenv.config();
 const authRoutes = require('./routes/auth'); // nouveau fichier unique
 const shopRoutes = require('./routes/shop');
 const classesRoutes = require('./routes/classes');
-
 const PORT = process.env.PORT || 5000;
 const app = express();
 
