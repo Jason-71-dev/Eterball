@@ -60,7 +60,7 @@ const Acceuil = () => {
   return (
     <div>
       <section id="intro">
-        <div id="description">
+        <div className="description">
           <h1>Fais vibrer le terrain dans Eterball</h1>
           <p id="catchphrase">
             Plonge dans un MMORPG unique ou stratégie et esprit d&apos;équipe
@@ -83,7 +83,7 @@ const Acceuil = () => {
             <div id="img-actus-container">
               <Link href="/actus/les-dragons-debarquent">
                 <Image
-                  id="img-dragons"
+                  className="img-dragons"
                   src="/TeamDragons.png"
                   alt="Team Dragons"
                   width={250}
@@ -92,7 +92,7 @@ const Acceuil = () => {
               </Link>
               <Link href="/actus/dragonflame-stadium">
                 <Image
-                  id="img-dragonStadium"
+                  className="img-dragonStadium"
                   src="/DragonFlame_Stadium.png"
                   alt="Team Dragons"
                   width={250}
@@ -102,7 +102,7 @@ const Acceuil = () => {
 
               <Link href="/actus/creer-ton-equipe">
                 <Image
-                  id="img-teamDepart"
+                  className="img-teamDepart"
                   src="/Team_depart.png"
                   alt="Team Dragons"
                   width={250}
@@ -141,21 +141,21 @@ const Acceuil = () => {
       <section id="img-presentation">
         <div id="img-jeu">
           <Image
-            id="img-dragons"
+            className="img-dragons"
             src="/ville_principale_secteur_marchand.png"
             alt="Team Dragons"
             width={400}
             height={250}
           />
           <Image
-            id="img-dragonStadium"
+            className="img-dragonStadium"
             src="/personnalisation_joueur.png"
             alt="Team Dragons"
             width={400}
             height={250}
           />
           <Image
-            id="img-teamDepart"
+            className="img-teamDepart"
             src="/Entrainement_agilite1.png"
             alt="Entrainement Agilité"
             width={400}
@@ -200,7 +200,7 @@ const Acceuil = () => {
           <div id="intro-personnages">
             <h2>{currentClass.name}</h2>
 
-            <p id="description">{currentClass.description}</p>
+            <p className="description">{currentClass.description}</p>
 
             <Link href="/classes">
               <button id="pageJoueurs">Voir toutes les classes</button>

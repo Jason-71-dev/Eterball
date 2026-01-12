@@ -1,6 +1,6 @@
 @use '../../../styles/variables' as *;
 
-header#navbar {
+header.navbar {
   position: fixed;
   z-index: 9999;
   top: 10;
@@ -16,19 +16,19 @@ header#navbar {
   width: 98.5%;
 }
 
-nav#hors-connexion {
+nav.hors-connexion {
   display: flex;
   align-items: center;
 
-  #logo-nav {
+  .logo-nav {
     position: absolute;
     top: 5px;
     left: 50px;
     z-index: 10;
   }
 
-  div#menus {
-    ul#menu {
+  div.menus {
+    ul.menu {
       position: absolute;
       top: 28px;
       left: 250px;
@@ -68,18 +68,18 @@ nav#hors-connexion {
     }
   }
 
-  div#connexion {
+  div.connexion {
     width: 20vw;
     position: absolute;
     right: 30px;
 
-    div#langue {
+    div.langue {
       display: flex;
       align-items: center;
       gap: 5px;
     }
 
-    ul#connecter {
+    ul.connecter {
       list-style: none;
       margin: 0;
       padding: 10px 0px 0px 0px;
@@ -89,13 +89,13 @@ nav#hors-connexion {
     }
   }
 
-  li#planete {
+  li.planete {
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  li#compte {
+  li.compte {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -144,7 +144,7 @@ nav#hors-connexion {
 }
 
 /* --- MENU BURGER --- */
-#burger {
+.burger {
   display: none;
   flex-direction: column;
   justify-content: space-between;
@@ -164,7 +164,7 @@ nav#hors-connexion {
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-  header {
+  header.navbar {
     height: 60px;
     padding: 0 10px;
     margin: 0;
@@ -174,7 +174,7 @@ nav#hors-connexion {
     gap: 0;
   }
 
-  nav#hors-connexion {
+  nav.hors-connexion {
     width: 100%;
     padding: 0;
     position: relative;
@@ -182,17 +182,17 @@ nav#hors-connexion {
     justify-content: space-between;
     align-items: center;
 
-    #logo-nav {
+    .logo-nav {
       position: absolute;
       top: -15px;
       left: 0;
     }
 
-    #logo-container {
+    .logo-container {
       flex-shrink: 0;
     }
-    div#menus {
-      ul#menu {
+    div.menus {
+      ul.menu {
         gap: 0;
         position: static;
         left: auto;
@@ -205,14 +205,14 @@ nav#hors-connexion {
   }
 
   /* BARRE DROITE : Compte + Burger */
-  #connexion {
+  .connexion {
     position: static !important;
     width: 200px !important;
     display: flex;
     align-items: center;
     gap: 15px;
 
-    ul#connecter {
+    ul.connecter {
       gap: 0;
       padding: 0;
       margin: 0;
@@ -221,31 +221,31 @@ nav#hors-connexion {
     }
 
     /* Afficher UNIQUEMENT l'icône compte */
-    li#compte {
+    li.compte {
       display: flex;
       margin: 0;
     }
 
     /* Cacher langue et bouton jouer */
-    li:not(#compte) {
+    li:not(.compte) {
       display: none;
     }
   }
 
   /* BURGER à droite */
-  #burger {
+  .burger {
     display: flex;
     position: static;
     margin-left: 15px;
   }
 
   /* DÉSACTIVER LES POSITIONS ABSOLUES SUR MOBILE */
-  div#menus {
+  div.menus {
     display: none;
   }
 
   /* MENU BURGER OUVERT */
-  #menus.open {
+  .menus.open {
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -261,7 +261,7 @@ nav#hors-connexion {
     overflow-y: auto;
   }
 
-  #menus.open ul#menu {
+  .menus.open ul.menu {
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
@@ -272,7 +272,7 @@ nav#hors-connexion {
     height: auto;
   }
 
-  #menus.open ul#menu > li {
+  .menus.open ul.menu > li {
     width: 90%;
     margin-bottom: 12px;
   }
@@ -347,7 +347,7 @@ nav#hors-connexion {
   }
 
   /* Bouton JOUER en bas du menu */
-  #menus.open button#jouer {
+  .menus.open button#jouer {
     display: block;
     width: 90%;
     max-width: 500px;

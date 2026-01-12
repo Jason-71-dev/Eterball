@@ -46,21 +46,21 @@ const Navbar: FC = () => {
 
   if (!mounted) {
     return (
-      <header id="navbar">
-        <nav id="hors-connexion">
-          <div id="logo-container">
+      <header className="navbar">
+        <nav className="hors-connexion">
+          <div className="logo-container">
             <Link href="/">
               <Image
                 src="/Logo(2).png"
                 alt="logo"
                 width={120}
                 height={110}
-                id="logo-nav"
+                className="logo-nav"
               />
             </Link>
           </div>
-          <div id="menus">
-            <ul id="menu">
+          <div className="menus">
+            <ul className="menu">
               <li className="dropdown">
                 <span className="dropdown-toggle">Jeu</span>
                 <ul className="dropdown-menu">
@@ -89,10 +89,10 @@ const Navbar: FC = () => {
               </li>
             </ul>
           </div>
-          <div id="connexion">
-            <ul id="connecter">
-              <div id="langue">
-                <li id="planete">
+          <div className="connexion">
+            <ul className="connecter">
+              <div className="langue">
+                <li className="planete">
                   <Image
                     src="/assets/planete.png"
                     alt="planete"
@@ -102,7 +102,7 @@ const Navbar: FC = () => {
                 </li>
                 <li>FR</li>
               </div>
-              <li id="compte">
+              <li className="compte">
                 <Image
                   src="/assets/icons8-user-48.png"
                   alt="icône compte"
@@ -124,22 +124,22 @@ const Navbar: FC = () => {
   }
 
   return (
-    <header id="navbar">
-      <nav id="hors-connexion">
-        <div id="logo-container">
+    <header className="navbar">
+      <nav className="hors-connexion">
+        <div className="logo-container">
           <Link href="/">
             <Image
               src="/Logo(2).png"
               alt="logo"
               width={120}
               height={110}
-              id="logo-nav"
+              className="logo-nav"
             />
           </Link>
         </div>
 
-        <div id="menus" className={menuOpen ? 'open' : ''}>
-          <ul id="menu">
+        <div className={menuOpen ? 'menus open' : 'menus'}>
+          <ul className="menu">
             {/* JEU */}
             <li
               className={`dropdown ${openDropdown === 'jeu' ? 'active' : ''}`}
@@ -245,10 +245,10 @@ const Navbar: FC = () => {
           )}
         </div>
 
-        <div id="connexion">
-          <ul id="connecter">
-            <div id="langue">
-              <li id="planete">
+        <div className="connexion">
+          <ul className="connecter">
+            <div className="langue">
+              <li className="planete">
                 <Image
                   src="/assets/planete.png"
                   alt="planete"
@@ -258,7 +258,7 @@ const Navbar: FC = () => {
               </li>
               <li>FR</li>
             </div>
-            <li id="compte">
+            <li className="compte">
               {user ? (
                 <UserMenu />
               ) : (
@@ -279,7 +279,7 @@ const Navbar: FC = () => {
             </li>
           </ul>
 
-          <div id="burger" onClick={toggleMenu}>
+          <div className="burger" onClick={toggleMenu}>
             <span className="bar"></span>
             <span className="bar"></span>
             <span className="bar"></span>

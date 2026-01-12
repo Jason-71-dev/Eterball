@@ -27,7 +27,7 @@
   }
 
   // Zone de description
-  #description {
+  .description {
     position: relative;
     max-width: 800px;
     text-align: center;
@@ -82,19 +82,19 @@
     background-size: cover;
   }
 
-  #intro #description {
+  #intro .description {
     width: 100%;
     max-width: 100%;
     font-size: 1rem;
   }
 
-  #intro #description h1 {
+  #intro .description h1 {
     font-size: 1.8rem;
     line-height: 1.2;
     margin-bottom: 15px;
   }
 
-  #intro #description #catchphrase {
+  #intro .description #catchphrase {
     font-size: 0.95rem;
     margin-bottom: 25px;
   }
@@ -453,7 +453,7 @@
     width: 600px;
     text-align: center;
 
-    #description {
+    .description {
       text-align: center;
       font-family: $Text;
       font-size: 1.3rem;
@@ -486,7 +486,7 @@
     h2 {
       font-size: 2rem;
     }
-    #intro-personnages #description {
+    #intro-personnages .description {
       font-size: 1.1rem;
       padding: 0 15px;
       text-align: center;
