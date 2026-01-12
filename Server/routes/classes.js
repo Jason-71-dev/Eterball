@@ -16,7 +16,21 @@ router.get('/classes', async (req, res) => {
       .json({ message: 'Erreur serveur lors de la récupération des classes.' });
   }
 });
+// GET /classes/carousel
+router.get('/classes/carousel', async (req, res) => {
+  try {
+    const classes = await Class.find()
+      .sort({ order: 1 })
+      .select('name slug image description order');
 
+    res.status(200).json(classes);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: 'Erreur serveur lors de la récupération des classes (carousel).',
+    });
+  }
+});
 /**
  * GET /classes/:slug
  * Récupérer une classe par son slug
