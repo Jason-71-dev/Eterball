@@ -37,7 +37,7 @@ const Navbar: FC = () => {
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
-    setOpenDropdown(null); // Fermer les dropdowns quand on ouvre/ferme le menu
+    setOpenDropdown(null);
   };
 
   const toggleDropdown = (name: string) => {
@@ -78,9 +78,12 @@ const Navbar: FC = () => {
               <li>
                 <Link href="/actus">Actus</Link>
               </li>
+
+              {/* Boutique simple (pas de dropdown) */}
               <li>
                 <Link href="/boutique">Boutique</Link>
               </li>
+
               <li>
                 <p>Autres</p>
               </li>
@@ -195,35 +198,11 @@ const Navbar: FC = () => {
               </ul>
             </li>
 
-            {/* BOUTIQUE */}
-            <li
-              className={`dropdown ${
-                openDropdown === 'boutique' ? 'active' : ''
-              }`}
-            >
-              <span
-                className="dropdown-toggle"
-                onClick={() => toggleDropdown('boutique')}
-              >
+            {/* BOUTIQUE simple (pas de dropdown, plus de 404) */}
+            <li className="nav-link">
+              <Link href="/boutique" onClick={closeMenu}>
                 Boutique
-              </span>
-              <ul className="dropdown-menu">
-                <li>
-                  <Link href="/boutique" onClick={closeMenu}>
-                    Tout
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/boutique/packs" onClick={closeMenu}>
-                    Packs
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/boutique/cosmetiques" onClick={closeMenu}>
-                    Cosmétiques
-                  </Link>
-                </li>
-              </ul>
+              </Link>
             </li>
 
             {/* AUTRES */}

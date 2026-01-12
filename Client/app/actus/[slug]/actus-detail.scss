@@ -1,27 +1,51 @@
 @use '../../../styles/variables' as *;
+
 .actus-detail {
   background: #020b24;
   color: $text-color;
   min-height: 100vh;
-  padding: 120px 50px;
+
+  padding: 50px;
 }
 
+/* HERO */
 .hero {
   position: relative;
-  height: 60vh;
+  width: 100%;
+  margin-top: 100px;
 
+  height: clamp(240px, 50vh, 520px);
+
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  z-index: 0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0));
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Next/Image avec fill met l'image en absolute */
   img {
     object-fit: cover;
-    border-radius: 12px 12px 0 0;
+    object-position: center;
   }
 
   h1 {
     position: absolute;
-    bottom: 40px;
+    bottom: 32px;
     left: 5vw;
-    font-size: 3rem;
-    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 2;
+
+    margin: 0;
+    padding: 12px 18px;
     border-radius: 12px;
+
+    font-size: 3.2rem;
   }
 }
 
@@ -33,4 +57,37 @@
   color: $text-color;
   background-color: $secondary-background;
   border-radius: 0 0 12px 12px;
+}
+.actus-back {
+  margin-bottom: 16px;
+}
+
+.hero-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 3; // au-dessus de l’image + overlay
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 14px;
+  border-radius: 999px;
+
+  font-size: 0.9rem;
+  font-family: $Text;
+  color: $text-color;
+  text-decoration: none;
+
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  transition: background 0.2s ease, transform 0.15s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.6);
+    transform: translateX(-2px);
+  }
 }

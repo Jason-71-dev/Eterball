@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     'Politique de confidentialité du site Eterball (projet fictif à vocation pédagogique).',
 };
 
-export default function ConfidentialitePage() {
+const ConfidentialitePage = () => {
   return (
     <>
       <h1 className="legal__title">Politique de confidentialité</h1>
@@ -135,4 +135,6 @@ export default function ConfidentialitePage() {
       <p className="legal__updated">Dernière mise à jour : 11/01/2026</p>
     </>
   );
-}
+};
+
+export default ConfidentialitePage;

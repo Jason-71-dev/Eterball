@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     'Mentions légales du site Eterball (projet fictif à vocation pédagogique).',
 };
 
-export default function MentionsLegalesPage() {
+const MentionsLegalesPage = () => {
   return (
     <>
       <h1 className="legal__title">Mentions légales</h1>
@@ -65,4 +65,6 @@ export default function MentionsLegalesPage() {
       <p className="legal__updated">Dernière mise à jour : 11/01/2026</p>
     </>
   );
-}
+};
+
+export default MentionsLegalesPage;

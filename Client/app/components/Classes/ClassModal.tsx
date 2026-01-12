@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ClassStats from './ClassStats';
 import DifficultyBadge from './DifficultyBadge';
 import { ClassType } from '@/app/types/class';
@@ -12,9 +12,36 @@ type Props = {
 const ClassModal = ({ data, onClose }: Props) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
+  // ✅ Fermer avec Escape
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
     <div className="class-overlay" onClick={onClose}>
-      <div className="class-modal" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="class-modal"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Détails de la classe ${data.name}`}
+      >
+        {/* ✅ Bouton fermer */}
+        <button
+          type="button"
+          className="class-modal__close"
+          onClick={onClose}
+          aria-label="Fermer"
+          title="Fermer"
+        >
+          ✕
+        </button>
+
         <div className="class-modal__front">
           {/* IMAGE (toujours à gauche) */}
           <div className="class-modal__image">

@@ -1,66 +1,322 @@
 @use '../../styles/variables' as *;
 
-main {
+#shop {
   margin-top: 140px;
-  #title-shop {
-    display: flex;
-    justify-content: center;
+}
+
+#shop-section.shop-layout {
+  padding: 0 12px;
+  display: grid;
+  grid-template-columns: 280px 1fr; // gauche / droite
+  gap: 18px;
+  align-items: start;
+}
+
+/* Sidebar */
+.shop-filters {
+  border-radius: 8px;
+  padding: 14px;
+  height: fit-content;
+
+  .filter-block {
+    margin-top: 14px;
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
   }
-  #shop-section {
+
+  .filters-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .filters-list button {
+    all: unset;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 10px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    font-family: $Text;
+    color: $text-color;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
+    text-align: left;
+  }
+  .filters-list button:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .filters-list button:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.35);
+    outline-offset: 2px;
+  }
+  .price-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: transparent;
+      color: $text-color;
+    }
+  }
+}
+
+/* Barre de tri au-dessus des cartes */
+.shop-results .results-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+
+  .sort {
     display: flex;
-    width: 98%;
+    gap: 10px;
+    align-items: center;
 
-    div {
-      .cat {
-        display: flex;
-        gap: 15px;
-        list-style: none;
-        padding: 0;
-        justify-content: center;
-        font-size: 1.5rem;
-        flex-wrap: wrap;
-        height: 350px;
+    select {
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+  }
+}
 
-        li {
-          background-color: $secondary-background;
-          border-radius: 8px;
-          cursor: pointer;
-          padding: 30px 0 30px 0;
-          width: 18%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-align: center;
-          font-family: $Title;
-        }
-      }
-      .item-list {
-        padding: 0;
-        display: flex;
-        flex-wrap: wrap;
+/* Grille 4 colonnes */
+.shop-results .item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 
-        .item {
-          width: 20%;
-          list-style: none;
-          min-width: 150px;
-          text-align: center;
-          border-radius: 8px;
-          display: flex;
-          justify-content: center;
-          margin-bottom: 55px;
-          font-family: $Text;
-          .card-container {
-            img {
-              border-radius: 8px 8px 0 0;
-              object-fit: cover;
-              background-color: whitesmoke;
-            }
-            background-color: $secondary-background;
-            width: 250px;
-            border-radius: 8px;
-          }
-        }
+  display: grid;
+  grid-template-columns: repeat(4, minmax(160px, 1fr)); // 4 cartes
+  gap: 18px;
+}
+
+/* Cards */
+.card-container {
+  background-color: $secondary-background;
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: whitesmoke;
+}
+
+.item-name {
+  margin: 8px 12px 0;
+  font-family: $Text;
+  text-align: center;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  min-height: 2.6em; // garantit même hauteur
+}
+
+.item-price {
+  margin: 6px 12px 0;
+  text-align: center;
+}
+
+.button-shop {
+  width: calc(100% - 24px);
+  margin: 12px;
+  margin-top: auto;
+  padding: 10px 0;
+  font-weight: 600;
+  cursor: pointer;
+
+  &.disabled,
+  &:disabled {
+    background: #888;
+    color: $text-color;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &:hover {
+    background: $hover-button;
+  }
+}
+
+/* Bouton filtres (mobile) */
+.filters-toggle {
+  display: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: $Text;
+  cursor: pointer;
+}
+
+/* Overlay */
+.filters-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 60;
+
+  &.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* Drawer */
+.filters-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: min(86vw, 360px);
+  background: $secondary-background;
+  transform: translateX(-100%);
+  transition: transform 0.25s;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+
+  &.open {
+    transform: translateX(0);
+  }
+  .drawer-header h2 {
+    all: unset; // reset complet des styles hérités
+    display: block;
+
+    font-family: $Title;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $text-color;
+
+    margin: 0;
+    padding: 0;
+    line-height: 1.2;
+  }
+
+  .drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    button {
+      border: none;
+      background: transparent;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: $text-color;
+
+      &:hover {
+        background: $text-color;
       }
     }
+  }
+
+  .drawer-content {
+    padding: 14px;
+    overflow-y: auto;
+  }
+
+  /* Dans le drawer, on enlève le style de liste et on neutralise les styles globaux des boutons */
+  .filters-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+
+  .filters-list li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .filters-list button {
+    all: unset;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 10px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    font-family: $Text;
+    color: $text-color;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
+    text-align: left;
+  }
+
+  .filters-list button:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .filters-list button:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.35);
+    outline-offset: 2px;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  #shop-section.shop-layout {
+    grid-template-columns: 240px 1fr;
+  }
+
+  .shop-results .item-list {
+    grid-template-columns: repeat(3, minmax(160px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  #shop-section.shop-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .shop-filters {
+    display: none;
+  }
+
+  .filters-toggle {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .shop-results .item-list {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+
+  /* Drawer en plein écran sur mobile */
+  .filters-drawer {
+    width: 100vw;
+    height: 100vh;
   }
 }

@@ -1,0 +1,64 @@
+@use '../../../styles/variables' as *;
+
+.wip {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  &__card {
+    width: min(720px, 100%);
+    padding: 24px;
+    border-radius: 16px;
+    background: $secondary-background;
+
+    backdrop-filter: blur(8px);
+    text-align: center;
+  }
+
+  &__badge {
+    display: inline-block;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    opacity: 0.85;
+  }
+
+  &__title {
+    font-size: 28px;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  &__message {
+    font-size: 16px;
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+
+  &__actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__button {
+    padding: 10px 16px;
+    border-radius: 12px;
+    background-color: $button-color;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    color: $text-color;
+
+    &:hover {
+      transform: translateY(-1px);
+      background: $hover-button;
+    }
+  }
+}

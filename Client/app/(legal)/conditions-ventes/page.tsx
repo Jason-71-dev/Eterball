@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     'Conditions de vente (version fictive) — la boutique Eterball est une démonstration pédagogique sans paiement réel.',
 };
 
-export default function ConditionsVentesPage() {
+const ConditionsVentesPage = () => {
   return (
     <>
       <h1 className="legal__title">Conditions Générales de Vente</h1>
@@ -101,4 +101,6 @@ export default function ConditionsVentesPage() {
       <p className="legal__updated">Dernière mise à jour : 11/01/2026</p>
     </>
   );
-}
+};
+
+export default ConditionsVentesPage;
