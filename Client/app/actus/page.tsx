@@ -1,10 +1,16 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import './actus.scss';
 
-const ACTUS = [
+type ActuCard = {
+  slug: string;
+  title: string;
+  tag: string;
+  image: string;
+  featured?: boolean;
+};
+
+const ACTUS: ActuCard[] = [
   {
     slug: 'les-dragons-debarquent',
     title: 'Les Dragons Débarquent !',
@@ -47,39 +53,52 @@ const ACTUS = [
 const featured = ACTUS.find((a) => a.featured);
 const others = ACTUS.filter((a) => !a.featured);
 
-const ActusPage = () => {
+export default function ActusPage() {
+  const side = others[0]; // peut être undefined si ACTUS ne contient que le featured
+
   return (
     <main className="actus-page">
       <h1 className="actus-title">Actualités</h1>
 
-      {/* ===== TOP LAYOUT ===== */}
       {featured && (
         <section className="actus-layout">
           <Link
             href={`/actus/${featured.slug}`}
             className="actus-card actus-card--featured"
           >
-            <Image src={featured.image} alt={featured.title} fill priority />
+            <Image
+              src={featured.image}
+              alt={featured.title}
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 70vw"
+            />
             <div className="actus-overlay">
               <span className="actus-tag">{featured.tag}</span>
               <h2>{featured.title}</h2>
             </div>
           </Link>
 
-          <Link
-            href={`/actus/${others[0].slug}`}
-            className="actus-card actus-card--side"
-          >
-            <Image src={others[0].image} alt={others[0].title} fill />
-            <div className="actus-overlay">
-              <span className="actus-tag">{others[0].tag}</span>
-              <h3>{others[0].title}</h3>
-            </div>
-          </Link>
+          {side && (
+            <Link
+              href={`/actus/${side.slug}`}
+              className="actus-card actus-card--side"
+            >
+              <Image
+                src={side.image}
+                alt={side.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 30vw"
+              />
+              <div className="actus-overlay">
+                <span className="actus-tag">{side.tag}</span>
+                <h3>{side.title}</h3>
+              </div>
+            </Link>
+          )}
         </section>
       )}
 
-      {/* ===== GRID CLASSIQUE ===== */}
       <section className="actus-grid">
         {others.slice(1).map((actu) => (
           <Link
@@ -87,7 +106,12 @@ const ActusPage = () => {
             href={`/actus/${actu.slug}`}
             className="actus-card"
           >
-            <Image src={actu.image} alt={actu.title} fill />
+            <Image
+              src={actu.image}
+              alt={actu.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
             <div className="actus-overlay">
               <span className="actus-tag">{actu.tag}</span>
               <h3>{actu.title}</h3>
@@ -97,6 +121,4 @@ const ActusPage = () => {
       </section>
     </main>
   );
-};
-
-export default ActusPage;
+}

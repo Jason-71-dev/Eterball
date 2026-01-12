@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     'Politique de cookies du site Eterball (projet fictif à vocation pédagogique).',
 };
 
-export default function CookiesPage() {
+const CookiesPage = () => {
   return (
     <>
       <h1 className="legal__title">Politique de cookies</h1>
@@ -65,4 +65,6 @@ export default function CookiesPage() {
       <p className="legal__updated">Dernière mise à jour : 11/01/2026</p>
     </>
   );
-}
+};
+
+export default CookiesPage;

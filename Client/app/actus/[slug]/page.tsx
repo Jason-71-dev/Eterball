@@ -1,10 +1,15 @@
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import './actus-detail.scss';
+import Link from 'next/link';
 
-const ACTUS_DETAILS: Record<
-  string,
-  { title: string; image: string; content: string }
-> = {
+type Actu = {
+  title: string;
+  image: string;
+  content: string;
+};
+
+const RAW_ACTUS_DETAILS: Record<string, Actu> = {
   'les-dragons-debarquent': {
     title: 'Les Dragons Débarquent !',
     image: '/TeamDragons.png',
@@ -39,24 +44,48 @@ const ACTUS_DETAILS: Record<
     title: 'Augmente ton agilité',
     image: '/Entrainement_agilite1.png',
     content:
-      'L’agilité est l’atout le plus précieux d’un joueur d’Eterball. Elle te permet de dribbler avec fluidité, d’éviter les adversaires et de réagir instantanément aux imprévus du terrain. Avec des entraînements spécifiques et des techniques avancées, tu peux repousser tes limites, améliorer tes réflexes et devenir un maître du jeu rapide et imprévisible. Dans chaque match, ton agilité sera ton arme secrète pour surprendre et dominer tes adversaires.',
+      "L'agilité est l’atout le plus précieux d’un joueur d’Eterball. Elle te permet de dribbler avec fluidité, d’éviter les adversaires et de réagir instantanément aux imprévus du terrain. Avec des entraînements spécifiques et des techniques avancées, tu peux repousser tes limites, améliorer tes réflexes et devenir un maître du jeu rapide et imprévisible. Dans chaque match, ton agilité sera ton arme secrète pour surprendre et dominer tes adversaires.",
   },
 };
-export default function ActuDetailPage({
+
+function normalizeSlug(input: string) {
+  return decodeURIComponent(input)
+    .trim()
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\u2010\u2011\u2012\u2013\u2014\u2212]/g, '-');
+}
+
+const ACTUS_DETAILS: Record<string, Actu> = Object.fromEntries(
+  Object.entries(RAW_ACTUS_DETAILS).map(([slug, value]) => [
+    normalizeSlug(slug),
+    value,
+  ])
+);
+
+export default async function ActuDetailPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }> | { slug: string };
 }) {
-  const actu = ACTUS_DETAILS[params.slug];
+  const resolvedParams = await Promise.resolve(params);
+  const slug = normalizeSlug(resolvedParams.slug);
+  const actu = ACTUS_DETAILS[slug];
 
-  if (!actu) return null;
+  if (!actu) notFound();
 
   return (
     <main className="actus-detail">
-      <div className="hero">
-        <Image src={actu.image} alt={actu.title} fill priority />
+      <header className="hero">
+        <Link href="/actus" className="hero-back">
+          ← Retour aux actualités
+        </Link>
+
+        <Image src={actu.image} alt={actu.title} fill priority sizes="100vw" />
+
         <h1>{actu.title}</h1>
-      </div>
+      </header>
 
       <section className="content">
         <p>{actu.content}</p>
