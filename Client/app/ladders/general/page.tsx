@@ -159,8 +159,6 @@ const Ladders = () => {
                   <tr key={`${row.rank}-${row.pseudo}`}>
                     <td className="rank">{row.rank}</td>
                     <td>
-                      {/* Avatar : pour l’instant fallback sur une image fixe.
-                          Dès que tu stockes avatarURL côté User + populate, remplace src ici */}
                       <Image
                         src={row.avatarURL || '/Miniature_Milieu.png'}
                         alt={row.pseudo}
@@ -187,11 +185,9 @@ const Ladders = () => {
           <div id="server">
             <p className="category">Server</p>
 
-            {/* si tu as déjà du CSS qui n’aime pas les <select>, tu peux le laisser,
-                sinon tu peux styliser ce select plus tard */}
             <select value={server} onChange={(e) => setServer(e.target.value)}>
               <option value="Dragos">Dragos</option>
-              {/* Ajoute tes serveurs ici */}
+              {/* Ajouter les serveurs ici */}
               {/* <option value="Astra">Astra</option> */}
             </select>
           </div>
