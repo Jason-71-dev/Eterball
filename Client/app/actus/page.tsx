@@ -53,7 +53,7 @@ const ACTUS: ActuCard[] = [
 const featured = ACTUS.find((a) => a.featured);
 const others = ACTUS.filter((a) => !a.featured);
 
-export default function ActusPage() {
+const ActusPage = () => {
   const side = others[0]; // peut être undefined si ACTUS ne contient que le featured
 
   return (
@@ -121,4 +121,6 @@ export default function ActusPage() {
       </section>
     </main>
   );
-}
+};
+
+export default ActusPage;
