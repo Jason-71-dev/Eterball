@@ -186,10 +186,6 @@ const Ladders = () => {
 
           <div id="server">
             <p className="category">Server</p>
-            <p>
-              {/* Je garde ta structure (p/small) mais je rends ça interactif */}
-              <small>{server}</small>
-            </p>
 
             {/* si tu as déjà du CSS qui n’aime pas les <select>, tu peux le laisser,
                 sinon tu peux styliser ce select plus tard */}

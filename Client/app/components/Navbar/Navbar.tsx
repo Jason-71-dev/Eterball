@@ -8,6 +8,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useAuth from '../../hook/useAuth';
 import './navbar.scss';
+import { ArrowUpRight, ChevronDown } from 'lucide-react';
 
 const Navbar: FC = () => {
   useAuth();
@@ -62,7 +63,11 @@ const Navbar: FC = () => {
           <div className="menus">
             <ul className="menu">
               <li className="dropdown">
-                <span className="dropdown-toggle">Jeu</span>
+                <span className="dropdown-toggle">
+                  <span className="label">Jeu</span>
+                  <ChevronDown size={16} className="chevron" />
+                </span>
+
                 <ul className="dropdown-menu">
                   <li>
                     <Link href="/ladders">Ladders</Link>
@@ -75,8 +80,23 @@ const Navbar: FC = () => {
                   </li>
                 </ul>
               </li>
-              <li>
-                <Link href="/actus">Actus</Link>
+              <li className="dropdown">
+                <span className="dropdown-toggle">
+                  <span className="label">Actus</span>
+                  <ChevronDown size={16} className="chevron" />
+                </span>
+
+                <ul className="dropdown-menu">
+                  <li>
+                    <Link href="/actus">News</Link>
+                  </li>
+                  <li>
+                    <Link href="/actus/patchs">Patch notes</Link>
+                  </li>
+                  <li>
+                    <Link href="/actus/events">Événements</Link>
+                  </li>
+                </ul>
               </li>
 
               {/* Boutique simple (pas de dropdown) */}
@@ -85,7 +105,10 @@ const Navbar: FC = () => {
               </li>
 
               <li>
-                <p>Autres</p>
+                <span className="dropdown-toggle">
+                  <span className="label">Autres</span>
+                  <ChevronDown size={16} className="chevron" />
+                </span>
               </li>
             </ul>
           </div>
@@ -148,8 +171,13 @@ const Navbar: FC = () => {
                 className="dropdown-toggle"
                 onClick={() => toggleDropdown('jeu')}
               >
-                Jeu
+                <span className="label">Jeu</span>
+                <ChevronDown
+                  size={16}
+                  className={`chevron ${openDropdown === 'jeu' ? 'open' : ''}`}
+                />
               </span>
+
               <ul className="dropdown-menu">
                 <li>
                   <Link href="/ladders" onClick={closeMenu}>
@@ -177,7 +205,13 @@ const Navbar: FC = () => {
                 className="dropdown-toggle"
                 onClick={() => toggleDropdown('actus')}
               >
-                Actus
+                <span className="label">Actus</span>
+                <ChevronDown
+                  size={16}
+                  className={`chevron ${
+                    openDropdown === 'actus' ? 'open' : ''
+                  }`}
+                />
               </span>
               <ul className="dropdown-menu">
                 <li>
@@ -199,9 +233,10 @@ const Navbar: FC = () => {
             </li>
 
             {/* BOUTIQUE simple */}
-            <li className="nav-link">
+            <li className="nav-link boutique-link">
               <Link href="/boutique" onClick={closeMenu}>
-                Boutique
+                <span className="label">Boutique</span>
+                <ArrowUpRight size={16} className="arrow-diagonal" />
               </Link>
             </li>
 
@@ -215,7 +250,13 @@ const Navbar: FC = () => {
                 className="dropdown-toggle"
                 onClick={() => toggleDropdown('autres')}
               >
-                Autres
+                <span className="label">Autres</span>
+                <ChevronDown
+                  size={16}
+                  className={`chevron ${
+                    openDropdown === 'autres' ? 'open' : ''
+                  }`}
+                />
               </span>
               <ul className="dropdown-menu">
                 <li>

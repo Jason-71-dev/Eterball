@@ -137,10 +137,50 @@ nav.hors-connexion {
 .dropdown-menu li {
   padding: 10px;
 }
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Flèche */
+.arrow {
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.25s ease;
+  opacity: 0.8;
+}
+
+/* Dropdown ouvert */
+.arrow.open {
+  transform: rotate(-135deg);
+}
 
 /* Affichage du menu au survol */
 .dropdown:hover .dropdown-menu {
   display: block;
+}
+.boutique-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.arrow-diagonal {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  opacity: 0.85;
+}
+
+/* Petit mouvement au hover (très Dofus) */
+.boutique-link a:hover .arrow-diagonal {
+  transform: translate(3px, -3px);
+  opacity: 1;
 }
 
 /* --- MENU BURGER --- */
