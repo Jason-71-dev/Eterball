@@ -3,8 +3,80 @@
 import Image from 'next/image';
 import './succes.scss';
 import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
+
+type LadderSuccessRow = {
+  rank: number;
+  pseudo: string;
+  class: string;
+  server: string;
+  level: number;
+  successPoints: number;
+  avatarURL?: string;
+};
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
 
 const Ladders = () => {
+  const [server, setServer] = useState('Dragos');
+  const [query, setQuery] = useState('');
+
+  const [rows, setRows] = useState<LadderSuccessRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchLadder = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const url = `${API_URL}/api/ladders/success?server=${encodeURIComponent(
+          server
+        )}&season=1&page=1&limit=100`;
+
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const json = await res.json();
+        const data: LadderSuccessRow[] = Array.isArray(json?.data)
+          ? json.data
+          : [];
+
+        if (!cancelled) setRows(data);
+      } catch (e) {
+        if (!cancelled) {
+          setError(
+            e instanceof Error
+              ? e.message
+              : 'Impossible de charger le ladder succès.'
+          );
+          setRows([]);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    fetchLadder();
+    return () => {
+      cancelled = true;
+    };
+  }, [server]);
+
+  const filteredRows = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return rows;
+
+    return rows.filter((r) => {
+      return (
+        r.pseudo.toLowerCase().includes(q) || r.class.toLowerCase().includes(q)
+      );
+    });
+  }, [rows, query]);
+
   return (
     <div>
       <section id="laddersGeneral">
@@ -27,7 +99,7 @@ const Ladders = () => {
           <div className="ladder-image">
             <Image
               src="/Ladder_Gen.png"
-              alt="General ladder"
+              alt="Succes ladder"
               fill
               priority
               sizes="(max-width: 768px) 100vw, 850px"
@@ -46,181 +118,89 @@ const Ladders = () => {
                 <th className="game">Point de succès</th>
               </tr>
             </thead>
+
             <tbody>
-              <tr>
-                <td className="rank">1</td>
-                <td>
-                  <Image
-                    src="/Miniature_Ailier.png"
-                    alt="Nagaa"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Poweur-Aizen
-                </td>
-                <td className="class">Ailier</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">99 GEN</td>
-                <td className="game">9 245</td>
-              </tr>
-              <tr>
-                <td className="rank">2</td>
-                <td>
-                  <Image
-                    src="/Miniature_AT.png"
-                    alt="Poweur-Aizen"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Luigy
-                </td>
-                <td className="class">Attaquant</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">98 GEN</td>
-                <td className="game">8 600</td>
-              </tr>
-              <tr>
-                <td className="rank">3</td>
-                <td>
-                  <Image
-                    src="/Miniature_Milieu.png"
-                    alt="Luigy"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Nagaa
-                </td>
-                <td className="class">Milieu</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">100 GEN</td>
-                <td className="game">8 875</td>
-              </tr>
-              <tr>
-                <td className="rank">4</td>
-                <td>
-                  <Image
-                    src="/Miniature_AT.png"
-                    alt="Fastlearner"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Fastlearner
-                </td>
-                <td className="class">Attaquant</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">98 GEN</td>
-                <td className="game">8 300</td>
-              </tr>
-              <tr>
-                <td className="rank">5</td>
-                <td>
-                  <Image
-                    src="/Miniature_Gardien.png"
-                    alt="Zeyrox"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Zeyrox
-                </td>
-                <td className="class">Gardien</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">98 GEN</td>
-                <td className="game">8 172</td>
-              </tr>
-              <tr>
-                <td className="rank">6</td>
-                <td>
-                  <Image
-                    src="/Miniature_AilierF.png"
-                    alt="Satsuki71"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Satsuki71
-                </td>
-                <td className="class">Ailière</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">96 GEN</td>
-                <td className="game">8 058</td>
-              </tr>
-              <tr>
-                <td className="rank">7</td>
-                <td>
-                  <Image
-                    src="/Miniature_AT2.png"
-                    alt="Hypernova-Gbx"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Hypernova-Gbx
-                </td>
-                <td className="class">Attaquant</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">94 GEN</td>
-                <td className="game">7 827</td>
-              </tr>
-              <tr>
-                <td className="rank">8</td>
-                <td>
-                  <Image
-                    src="/Miniature_Milieu.png"
-                    alt="Le-H"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Le-H
-                </td>
-                <td className="class">Milieu</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">92 GEN</td>
-                <td className="game">7 757</td>
-              </tr>
-              <tr>
-                <td className="rank">9</td>
-                <td>
-                  <Image
-                    src="/Miniature_Def.png"
-                    alt="Waiss"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Collagene
-                </td>
-                <td className="class">Défenseur</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">91 GEN</td>
-                <td className="game">7 689</td>
-              </tr>
-              <tr>
-                <td className="rank">10</td>
-                <td>
-                  <Image
-                    src="/Miniature_Def.png"
-                    alt="Xefreh"
-                    width="50"
-                    height="50"
-                  />
-                  &nbsp;Xefreh
-                </td>
-                <td className="class">Défenseur</td>
-                <td className="server">Dragos</td>
-                <td className="lvl">91 GEN</td>
-                <td className="game">7 553</td>
-              </tr>
+              {loading && (
+                <tr>
+                  <td className="rank">-</td>
+                  <td>Chargement…</td>
+                  <td className="class">-</td>
+                  <td className="server">{server}</td>
+                  <td className="lvl">-</td>
+                  <td className="game">-</td>
+                </tr>
+              )}
+
+              {!loading && error && (
+                <tr>
+                  <td className="rank">-</td>
+                  <td>Erreur: {error}</td>
+                  <td className="class">-</td>
+                  <td className="server">{server}</td>
+                  <td className="lvl">-</td>
+                  <td className="game">-</td>
+                </tr>
+              )}
+
+              {!loading && !error && filteredRows.length === 0 && (
+                <tr>
+                  <td className="rank">-</td>
+                  <td>Aucun résultat</td>
+                  <td className="class">-</td>
+                  <td className="server">{server}</td>
+                  <td className="lvl">-</td>
+                  <td className="game">-</td>
+                </tr>
+              )}
+
+              {!loading &&
+                !error &&
+                filteredRows.map((row) => (
+                  <tr key={`${row.rank}-${row.pseudo}`}>
+                    <td className="rank">{row.rank}</td>
+                    <td>
+                      <Image
+                        src={row.avatarURL || '/Miniature_Milieu.png'}
+                        alt={row.pseudo}
+                        width={50}
+                        height={50}
+                      />
+                      &nbsp;{row.pseudo}
+                    </td>
+                    <td className="class">{row.class}</td>
+                    <td className="server">{row.server}</td>
+                    <td className="lvl">{row.level} GEN</td>
+                    <td className="game">
+                      {row.successPoints.toLocaleString('fr-FR')}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </article>
+
         <div id="filtre">
           <h2>Filtrer la liste</h2>
+
           <div id="server">
             <p className="category">Server</p>
             <p>
-              <small>Dragos</small>
+              <small>{server}</small>
             </p>
+
+            <select value={server} onChange={(e) => setServer(e.target.value)}>
+              <option value="Dragos">Dragos</option>
+            </select>
           </div>
+
           <div id="search">
             <p className="category">Recherche</p>
-            <input type="text" placeholder="Rechercher" />
+            <input
+              type="text"
+              placeholder="Rechercher"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
           </div>
         </div>
       </section>
