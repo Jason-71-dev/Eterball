@@ -94,8 +94,14 @@ const AdminPage = () => {
       return;
     }
 
-    if (!Array.isArray(itemPayload.category) || itemPayload.category.length === 0) {
-      setItemStatus({ kind: 'error', message: 'Ajoute au moins une catégorie.' });
+    if (
+      !Array.isArray(itemPayload.category) ||
+      itemPayload.category.length === 0
+    ) {
+      setItemStatus({
+        kind: 'error',
+        message: 'Ajoute au moins une catégorie.',
+      });
       return;
     }
 
@@ -124,7 +130,13 @@ const AdminPage = () => {
       }
 
       setItemStatus({ kind: 'success', message: 'Item créé.' });
-      setItemForm({ name: '', details: '', price: '', category: '', imageUrl: '' });
+      setItemForm({
+        name: '',
+        details: '',
+        price: '',
+        category: '',
+        imageUrl: '',
+      });
     } catch (err) {
       setItemStatus({ kind: 'error', message: 'Erreur serveur.' });
     }
@@ -224,7 +236,9 @@ const AdminPage = () => {
             Nom
             <input
               value={itemForm.name}
-              onChange={(e) => setItemForm({ ...itemForm, name: e.target.value })}
+              onChange={(e) =>
+                setItemForm({ ...itemForm, name: e.target.value })
+              }
             />
           </label>
 
@@ -244,7 +258,9 @@ const AdminPage = () => {
               type="number"
               min="0"
               value={itemForm.price}
-              onChange={(e) => setItemForm({ ...itemForm, price: e.target.value })}
+              onChange={(e) =>
+                setItemForm({ ...itemForm, price: e.target.value })
+              }
             />
           </label>
 
@@ -367,15 +383,19 @@ const AdminPage = () => {
             <label>
               HP
               <input
+                className="stats"
                 type="number"
                 min="0"
                 value={classForm.hp}
-                onChange={(e) => setClassForm({ ...classForm, hp: e.target.value })}
+                onChange={(e) =>
+                  setClassForm({ ...classForm, hp: e.target.value })
+                }
               />
             </label>
             <label>
               Attack
               <input
+                className="stats"
                 type="number"
                 min="0"
                 value={classForm.attack}
@@ -387,6 +407,7 @@ const AdminPage = () => {
             <label>
               Defense
               <input
+                className="stats"
                 type="number"
                 min="0"
                 value={classForm.defense}
@@ -398,6 +419,7 @@ const AdminPage = () => {
             <label>
               Speed
               <input
+                className="stats"
                 type="number"
                 min="0"
                 value={classForm.speed}
@@ -409,6 +431,7 @@ const AdminPage = () => {
             <label>
               Technique
               <input
+                className="stats"
                 type="number"
                 min="0"
                 value={classForm.technique}
@@ -420,6 +443,7 @@ const AdminPage = () => {
             <label>
               Stamina
               <input
+                className="stats"
                 type="number"
                 min="0"
                 value={classForm.stamina}
