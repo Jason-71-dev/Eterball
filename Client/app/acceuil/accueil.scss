@@ -415,11 +415,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transform: rotate(0);
 
       box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
-
+    .arrow.arrow-left svg {
+      transform: translateX(-1px);
+    }
+    .arrow.arrow-right svg {
+      transform: translateX(1px);
+    }
     .arrow:hover {
       transform: scale(1.1);
     }
