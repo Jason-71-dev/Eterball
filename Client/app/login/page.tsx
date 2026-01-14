@@ -62,6 +62,7 @@ const Login = () => {
             name: data.user.pseudo || data.user.identifier, // affichage
             avatar: '/assets/Coupe_Casquette.png',
             balance: data.user.balance ?? 0,
+            role: data.user.role || 'user',
           },
         })
       );

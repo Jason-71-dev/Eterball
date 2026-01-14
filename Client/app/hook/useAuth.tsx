@@ -30,6 +30,7 @@ const useAuth = () => {
               name: user.pseudo || user.identifier || user.username,
               avatar: user.avatar || '/assets/Coupe_Casquette.png',
               balance: user.balance ?? 0,
+              role: user.role || 'user',
             },
           })
         );

@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from '../store/auth';
 import { setBalance } from '../store/auth/authSlice';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type Item = {
   _id: string;
@@ -58,6 +59,8 @@ const ShopPage = () => {
   const token = useSelector((s: RootState) => s.auth.token);
   const isConnected = useSelector((s: RootState) => s.auth.isConnected);
   const balance = useSelector((s: RootState) => s.auth.user?.balance);
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -83,6 +86,17 @@ const ShopPage = () => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    const cat = searchParams.get('category');
+
+    // garde seulement les valeurs autorisées
+    const allowed = new Set(CATEGORIES.map((c) => c.id));
+
+    if (cat && allowed.has(cat as CategoryId)) {
+      setSelectedCategory(cat as CategoryId);
+    }
+  }, [searchParams]);
 
   // Bloque le scroll quand le drawer est ouvert
   useEffect(() => {
@@ -180,7 +194,14 @@ const ShopPage = () => {
 
   const onSelectCategory = (id: CategoryId) => {
     setSelectedCategory(id);
-    // UX mobile: ferme le drawer après sélection
+
+    // met à jour l'URL sans recharger la page
+    const params = new URLSearchParams(searchParams.toString());
+    if (id === 'all') params.delete('category');
+    else params.set('category', id);
+
+    router.push(`/boutique?${params.toString()}`, { scroll: false });
+
     setFiltersOpen(false);
   };
 

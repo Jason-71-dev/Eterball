@@ -5,6 +5,7 @@ export type User = {
   name: string; // pseudo ou identifier
   avatar: string;
   balance: number; // remplace eter
+  role?: 'user' | 'admin';
 };
 
 interface AuthState {
@@ -24,6 +25,25 @@ const initialState: AuthState = {
   isConnected: false,
 };
 
+function safeReadUserLS(): User | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const str = localStorage.getItem('user');
+    return str ? JSON.parse(str) : null;
+  } catch {
+    return null;
+  }
+}
+
+function safeWriteUserLS(user: User): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem('user', JSON.stringify(user));
+  } catch {
+    // ignore
+  }
+}
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -32,12 +52,35 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isConnected = true;
+
+      // (recommandé) persister à chaque login pour que refresh soit cohérent
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('token', action.payload.token);
+          // stocker "User" tel quel (id/name/avatar/balance)
+          safeWriteUserLS(action.payload.user);
+        } catch {
+          // ignore
+        }
+      }
     },
 
-    // NEW: mise à jour du solde après achat (ou autre)
+    // FIX: mise à jour du solde + synchro localStorage
     setBalance: (state, action: PayloadAction<number>) => {
+      const newBalance = action.payload;
+
       if (state.user) {
-        state.user.balance = action.payload;
+        state.user.balance = newBalance;
+      }
+
+      // synchro pour éviter que remette l'ancien solde au refresh
+      const lsUser = safeReadUserLS();
+      if (lsUser) {
+        lsUser.balance = newBalance;
+        safeWriteUserLS(lsUser);
+      } else if (state.user) {
+        // si jamais localStorage n'avait pas encore user
+        safeWriteUserLS(state.user);
       }
     },
 

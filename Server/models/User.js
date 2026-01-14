@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
     firstName: { type: String, required: true, trim: true, maxlength: 50 },
     lastName: { type: String, required: true, trim: true, maxlength: 50 },
 
-    // pseudo affiché (unique)
+    // pseudo affichÃ© (unique)
     pseudo: {
       type: String,
       required: true,
@@ -37,7 +37,10 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
-    //  mdp hashé
+    // role (user/admin)
+    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+
+    //  mdp hashÃ©
     password: { type: String, required: true },
 
     birthDate: { type: Date, required: true },

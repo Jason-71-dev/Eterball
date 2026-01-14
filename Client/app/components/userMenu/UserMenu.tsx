@@ -6,6 +6,7 @@ import { RootState } from '../../store/auth';
 import { logout } from '../../store/auth/authSlice';
 import Image from 'next/image';
 import styles from './UserMenu.module.scss';
+import Link from 'next/link';
 
 const UserMenu: FC = () => {
   const user = useSelector((s: RootState) => s.auth.user);
@@ -80,7 +81,7 @@ const UserMenu: FC = () => {
           <div className={styles.content}>
             <div className={styles.eterBox}>
               <p>Eter : {user.balance}</p>
-              <a href="/acheter-eter">Acheter des Eter</a>
+              <Link href="/boutique?category=eter">Acheter des Eter</Link>
             </div>
             <div className={styles.links}>
               <a href="/compte">Gestion de compte</a>
