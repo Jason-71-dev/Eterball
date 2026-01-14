@@ -5,6 +5,7 @@ export type User = {
   name: string; // pseudo ou identifier
   avatar: string;
   balance: number; // remplace eter
+  role?: 'user' | 'admin';
 };
 
 interface AuthState {

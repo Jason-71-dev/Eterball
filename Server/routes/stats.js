@@ -112,15 +112,12 @@ router.patch('/user/level', async (req, res) => {
   try {
     const userId = req.body.userId;
     if (!userId) return res.status(400).json({ error: 'userId is required' });
-
     const value =
       req.body.value !== undefined ? toInt(req.body.value, 1) : null;
     const inc = req.body.inc !== undefined ? toInt(req.body.inc, 0) : null;
-
     const server = requiredString(req.body.server);
     const playerClass = requiredString(req.body.class);
     const season = toInt(req.body.season, 1);
-
     const update = {
       $setOnInsert: {
         user: userId,
@@ -132,7 +129,6 @@ router.patch('/user/level', async (req, res) => {
         successPoints: 0,
       },
     };
-
     if (value !== null) {
       update.$set = { ...(update.$set || {}), levelGen: Math.max(1, value) };
     } else if (inc !== null && inc !== 0) {
@@ -140,20 +136,16 @@ router.patch('/user/level', async (req, res) => {
     } else {
       return res.status(400).json({ error: 'Provide value or inc' });
     }
-
     const set = {};
     if (server) set.server = server;
     if (playerClass) set.class = playerClass;
     if (season) set.season = season;
     if (Object.keys(set).length)
       update.$set = { ...(update.$set || {}), ...set };
-
     const doc = await UserStats.findOneAndUpdate({ user: userId }, update, {
       upsert: true,
       new: true,
     }).lean();
-
-    // clamp si inc négatif (optionnel)
     if (doc.levelGen < 1) {
       const fixed = await UserStats.findOneAndUpdate(
         { user: userId },
@@ -162,7 +154,6 @@ router.patch('/user/level', async (req, res) => {
       ).lean();
       return res.json({ ok: true, stats: fixed });
     }
-
     res.json({ ok: true, stats: doc });
   } catch (err) {
     console.error('PATCH /stats/user/level', err);

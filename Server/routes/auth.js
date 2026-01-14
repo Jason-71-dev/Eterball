@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.js');
-const UserStats = require('../models/UserStats'); // ✅ AJOUT
+const UserStats = require('../models/UserStats'); // Ã¢Å“â€¦ AJOUT
 
 // Helpers
 function normalizeEmail(email) {
@@ -44,7 +44,7 @@ router.post('/signup', async (req, res) => {
   ) {
     return res.status(400).json({
       message:
-        'Champs requis : identifiant, prénom, nom, pseudo, email, mot de passe, date de naissance.',
+        'Champs requis : identifiant, prÃƒÂ©nom, nom, pseudo, email, mot de passe, date de naissance.',
     });
   }
 
@@ -53,7 +53,7 @@ router.post('/signup', async (req, res) => {
   const cleanPseudo = normalizePseudo(pseudo);
 
   try {
-    // ✅ check doublons (identifiant OU email OU pseudo)
+    // Ã¢Å“â€¦ check doublons (identifiant OU email OU pseudo)
     const existing = await User.findOne({
       $or: [
         { identifier: cleanIdentifier },
@@ -65,27 +65,27 @@ router.post('/signup', async (req, res) => {
     if (existing) {
       if (existing.identifier === cleanIdentifier) {
         return res.status(409).json({
-          message: 'Identifiant déjà utilisé',
+          message: 'Identifiant dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
           field: 'identifier',
         });
       }
       if (existing.email === cleanEmail) {
         return res.status(409).json({
-          message: 'Email déjà utilisé',
+          message: 'Email dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
           field: 'email',
         });
       }
       if (existing.pseudo === cleanPseudo) {
         return res.status(409).json({
-          message: 'Pseudo déjà utilisé',
+          message: 'Pseudo dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
           field: 'pseudo',
         });
       }
 
-      return res.status(409).json({ message: 'Utilisateur déjà existant' });
+      return res.status(409).json({ message: 'Utilisateur dÃƒÂ©jÃƒÂ  existant' });
     }
 
-    // ✅ hash password
+    // Ã¢Å“â€¦ hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
@@ -97,19 +97,19 @@ router.post('/signup', async (req, res) => {
       password: hashedPassword,
       birthDate: new Date(birthDate),
       // balance et inventory ont des defaults
-      // avatarURL a un default '' si tu l'as ajouté au model
+      // avatarURL a un default '' si tu l'as ajoutÃƒÂ© au model
     });
 
     await newUser.save();
 
-    // ✅ AJOUT : créer les stats par défaut (anti-doublon via upsert)
+    // Ã¢Å“â€¦ AJOUT : crÃƒÂ©er les stats par dÃƒÂ©faut (anti-doublon via upsert)
     await UserStats.findOneAndUpdate(
       { user: newUser._id },
       {
         $setOnInsert: {
           user: newUser._id,
-          server: 'Dragos', // 🔴 change si tu as un choix de serveur au signup
-          class: 'Milieu', // 🔴 change si tu as un choix de classe au signup
+          server: 'Dragos', // Ã°Å¸â€Â´ change si tu as un choix de serveur au signup
+          class: 'Milieu', // Ã°Å¸â€Â´ change si tu as un choix de classe au signup
           levelGen: 1,
           matches: 0,
           successPoints: 0,
@@ -120,12 +120,13 @@ router.post('/signup', async (req, res) => {
     );
 
     return res.status(201).json({
-      message: 'Compte créé avec succès',
+      message: 'Compte crÃƒÂ©ÃƒÂ© avec succÃƒÂ¨s',
       user: {
         id: newUser._id,
         identifier: newUser.identifier,
         pseudo: newUser.pseudo,
         email: newUser.email,
+        role: newUser.role,
       },
     });
   } catch (err) {
@@ -136,13 +137,13 @@ router.post('/signup', async (req, res) => {
       const field = key || 'unknown';
 
       const msgMap = {
-        identifier: 'Identifiant déjà utilisé',
-        email: 'Email déjà utilisé',
-        pseudo: 'Pseudo déjà utilisé',
+        identifier: 'Identifiant dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
+        email: 'Email dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
+        pseudo: 'Pseudo dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
       };
 
       return res.status(409).json({
-        message: msgMap[field] || 'Champ déjà utilisé',
+        message: msgMap[field] || 'Champ dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
         field,
       });
     }
@@ -194,19 +195,20 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user._id, identifier: user.identifier },
+      { userId: user._id, identifier: user.identifier, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
 
     return res.status(200).json({
-      message: 'Connexion réussie',
+      message: 'Connexion rÃƒÂ©ussie',
       token,
       user: {
         id: user._id,
         identifier: user.identifier,
         pseudo: user.pseudo,
         email: user.email,
+        role: user.role,
         balance: user.balance,
       },
     });
