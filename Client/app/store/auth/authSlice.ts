@@ -25,7 +25,7 @@ const initialState: AuthState = {
   isConnected: false,
 };
 
-function safeReadUserLS(): User | null {
+const safeReadUserLS = (): User | null => {
   if (typeof window === 'undefined') return null;
   try {
     const str = localStorage.getItem('user');
@@ -33,16 +33,16 @@ function safeReadUserLS(): User | null {
   } catch {
     return null;
   }
-}
+};
 
-function safeWriteUserLS(user: User): void {
+const safeWriteUserLS = (user: User): void => {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem('user', JSON.stringify(user));
   } catch {
     // ignore
   }
-}
+};
 
 const authSlice = createSlice({
   name: 'auth',
@@ -53,7 +53,7 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.isConnected = true;
 
-      // (recommandé) persister à chaque login pour que refresh soit cohérent
+      // persister à chaque login pour que le refresh soit cohérent
       if (typeof window !== 'undefined') {
         try {
           localStorage.setItem('token', action.payload.token);

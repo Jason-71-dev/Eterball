@@ -21,7 +21,7 @@ const userStatsSchema = new mongoose.Schema(
     // Ladder Succès
     successPoints: { type: Number, default: 0, min: 0, index: true },
 
-    // Optionnel : si tu veux “saisons” plus tard
+    // Optionnel : saisons pour plus tard
     season: { type: Number, default: 1, index: true },
   },
   { timestamps: true }

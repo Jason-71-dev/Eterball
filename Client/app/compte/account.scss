@@ -3,7 +3,6 @@
 #accountPage {
   min-height: 100vh;
   width: 100%;
-  background: #0a0f2c;
   color: $text-color;
 }
 
@@ -56,7 +55,7 @@
 }
 
 .card {
-  background: linear-gradient(180deg, #0b1a63 0%, #07124b 100%);
+  background: $secondary-background;
   border-radius: 14px;
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25);
   overflow: hidden;

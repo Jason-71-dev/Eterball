@@ -1,7 +1,7 @@
 // models/User.js
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     // identifiant de connexion (unique)
     identifier: {
@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema(
     },
   },
 
-  { timestamps: true }
+  { timestamps: true },
 );
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', UserSchema);
 module.exports = User;

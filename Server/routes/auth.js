@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.js');
-const UserStats = require('../models/UserStats'); // Ã¢Å“â€¦ AJOUT
+const UserStats = require('../models/UserStats');
 
 // Helpers
 function normalizeEmail(email) {
@@ -44,7 +44,7 @@ router.post('/signup', async (req, res) => {
   ) {
     return res.status(400).json({
       message:
-        'Champs requis : identifiant, prÃƒÂ©nom, nom, pseudo, email, mot de passe, date de naissance.',
+        'Champs requis : identifiant, prénom, nom, pseudo, email, mot de passe, date de naissance.',
     });
   }
 
@@ -53,7 +53,7 @@ router.post('/signup', async (req, res) => {
   const cleanPseudo = normalizePseudo(pseudo);
 
   try {
-    // Ã¢Å“â€¦ check doublons (identifiant OU email OU pseudo)
+    // Check doublons (identifiant OU email OU pseudo)
     const existing = await User.findOne({
       $or: [
         { identifier: cleanIdentifier },
@@ -65,27 +65,27 @@ router.post('/signup', async (req, res) => {
     if (existing) {
       if (existing.identifier === cleanIdentifier) {
         return res.status(409).json({
-          message: 'Identifiant dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
+          message: 'Identifiant déjà utilisée',
           field: 'identifier',
         });
       }
       if (existing.email === cleanEmail) {
         return res.status(409).json({
-          message: 'Email dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
+          message: 'Email déjà utilisée',
           field: 'email',
         });
       }
       if (existing.pseudo === cleanPseudo) {
         return res.status(409).json({
-          message: 'Pseudo dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
+          message: 'Pseudo déjà utilisée',
           field: 'pseudo',
         });
       }
 
-      return res.status(409).json({ message: 'Utilisateur dÃƒÂ©jÃƒÂ  existant' });
+      return res.status(409).json({ message: 'Utilisateur déjà existant' });
     }
 
-    // Ã¢Å“â€¦ hash password
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
@@ -97,19 +97,19 @@ router.post('/signup', async (req, res) => {
       password: hashedPassword,
       birthDate: new Date(birthDate),
       // balance et inventory ont des defaults
-      // avatarURL a un default '' si tu l'as ajoutÃƒÂ© au model
+      // avatarURL a un default '' dans le schema
     });
 
     await newUser.save();
 
-    // Ã¢Å“â€¦ AJOUT : crÃƒÂ©er les stats par dÃƒÂ©faut (anti-doublon via upsert)
+    // AJOUT : créer les stats par défaut (anti-doublon via upsert)
     await UserStats.findOneAndUpdate(
       { user: newUser._id },
       {
         $setOnInsert: {
           user: newUser._id,
-          server: 'Dragos', // Ã°Å¸â€Â´ change si tu as un choix de serveur au signup
-          class: 'Milieu', // Ã°Å¸â€Â´ change si tu as un choix de classe au signup
+          server: 'Dragos',
+          class: 'Milieu',
           levelGen: 1,
           matches: 0,
           successPoints: 0,
@@ -120,7 +120,7 @@ router.post('/signup', async (req, res) => {
     );
 
     return res.status(201).json({
-      message: 'Compte crÃƒÂ©ÃƒÂ© avec succÃƒÂ¨s',
+      message: 'Compte créé avec succès',
       user: {
         id: newUser._id,
         identifier: newUser.identifier,
@@ -137,13 +137,13 @@ router.post('/signup', async (req, res) => {
       const field = key || 'unknown';
 
       const msgMap = {
-        identifier: 'Identifiant dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
-        email: 'Email dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
-        pseudo: 'Pseudo dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
+        identifier: 'Identifiant déjà utilisée',
+        email: 'Email déjà utilisée',
+        pseudo: 'Pseudo déjà utilisée',
       };
 
       return res.status(409).json({
-        message: msgMap[field] || 'Champ dÃƒÂ©jÃƒÂ  utilisÃƒÂ©',
+        message: msgMap[field] || 'Champ déjà utilisée',
         field,
       });
     }
@@ -201,7 +201,7 @@ router.post('/login', async (req, res) => {
     );
 
     return res.status(200).json({
-      message: 'Connexion rÃƒÂ©ussie',
+      message: 'Connexion réussie',
       token,
       user: {
         id: user._id,
