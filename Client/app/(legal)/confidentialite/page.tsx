@@ -119,7 +119,7 @@ const ConfidentialitePage = () => {
         </p>
         <p className="legal__p">
           Pour exercer ces droits :{' '}
-          <span className="legal__mono">[ton email]</span>
+          <span className="legal__mono">jason-71@outlook.fr</span>
         </p>
       </section>
 

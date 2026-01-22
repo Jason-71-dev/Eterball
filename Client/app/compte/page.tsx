@@ -85,7 +85,7 @@ const AccountPage = () => {
               </div>
 
               <div className="card-divider" />
-              <div className="card-title sub">Historique d'achats</div>
+              <div className="card-title sub">Historique d&apos;achats</div>
               <div className="card-body">
                 <p className="muted">
                   Consulter l&apos;historique de vos achats.

@@ -17,8 +17,8 @@ async function run() {
 
     await UserStats.create({
       user: user._id,
-      server: 'Dragos', // 🔴 adapte si tu as plusieurs serveurs
-      class: 'Milieu', // 🔴 valeur par défaut temporaire
+      server: 'Dragos', // adapter si plusieurs serveurs
+      class: '', // valeur par défaut
       levelGen: 1,
       matches: 0,
       successPoints: 0,
@@ -28,7 +28,7 @@ async function run() {
     created++;
   }
 
-  console.log(`✅ UserStats created: ${created}`);
+  console.log(`UserStats created: ${created}`);
   await mongoose.disconnect();
 }
 

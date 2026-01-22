@@ -1,7 +1,7 @@
 'use client';
 import { useState, useRef, useEffect, type FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useRouter } from 'next/navigation'; // ← AJOUTER CETTE LIGNE
+import { useRouter } from 'next/navigation'; // AJOUTER CETTE LIGNE
 import { RootState } from '../../store/auth';
 import { logout } from '../../store/auth/authSlice';
 import Image from 'next/image';
@@ -11,7 +11,7 @@ import Link from 'next/link';
 const UserMenu: FC = () => {
   const user = useSelector((s: RootState) => s.auth.user);
   const dispatch = useDispatch();
-  const router = useRouter(); // ← AJOUTER CETTE LIGNE
+  const router = useRouter(); // AJOUTER CETTE LIGNE
 
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement | null>(null);
@@ -34,7 +34,7 @@ const UserMenu: FC = () => {
     closeTimer.current = window.setTimeout(() => setOpen(false), 150);
   };
 
-  // ← AJOUTER CETTE FONCTION
+  // AJOUTER CETTE FONCTION
   const handleLogout = () => {
     dispatch(logout());
     router.push('/login');
@@ -86,9 +86,10 @@ const UserMenu: FC = () => {
             <div className={styles.links}>
               <a href="/compte">Gestion de compte</a>
               <a href="/securite">Protéger votre compte !</a>
+              {user.role === 'admin' && <Link href="/admin">Admin</Link>}
             </div>
             <button
-              onClick={handleLogout} // ← MODIFIER CETTE LIGNE
+              onClick={handleLogout} // MODIFIER CETTE LIGNE
               className={styles.logout}
             >
               Déconnexion

@@ -1,7 +1,7 @@
 @use '../../../styles/variables' as *;
 
 .actus-detail {
-  background: #020b24;
+  background: $primary-background;
   color: $text-color;
   min-height: 100vh;
 

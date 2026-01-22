@@ -20,7 +20,7 @@ function requiredString(value) {
 /**
  * USER STATS
  * ----------
- * Convention: tu envoies server + class au moins lors de la création/upsert.
+ * Convention: envoies server + class au moins lors de la création/upsert.
  */
 
 // POST /api/stats/user/init

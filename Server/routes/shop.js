@@ -13,7 +13,7 @@ router.get('/items', async (req, res) => {
   } catch (err) {
     console.error('GET /shop/items ERROR:', err);
     return res.status(500).json({
-      message: 'Erreur serveur lors de la rÃ©cupÃ©ration des items.',
+      message: 'Erreur serveur lors de la récupération des items.',
     });
   }
 });
@@ -28,20 +28,19 @@ router.post('/buy/:itemId', authenticateToken, async (req, res) => {
     }
 
     const item = await Item.findById(req.params.itemId);
-    if (!item) return res.status(404).json({ message: 'Item non trouvÃ©.' });
+    if (!item) return res.status(404).json({ message: 'Item non trouvé.' });
 
     const user = await User.findById(userId);
     if (!user)
-      return res.status(404).json({ message: 'Utilisateur non trouvÃ©.' });
-
-    // Optionnel mais conseillÃ© : Ã©viter achat doublon
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    // Optionnel mais conseillé : éviter achat doublon
     const alreadyOwned = user.inventory.some(
       (id) => id.toString() === item._id.toString()
     );
     if (alreadyOwned) {
       return res
         .status(409)
-        .json({ message: 'Item dÃ©jÃ  dans ton inventaire.' });
+        .json({ message: 'Item déjà dans ton inventaire.' });
     }
 
     if (user.balance < item.price) {
@@ -53,7 +52,7 @@ router.post('/buy/:itemId', authenticateToken, async (req, res) => {
     await user.save();
 
     return res.status(200).json({
-      message: `Achat rÃ©ussi ! ${item.name} a Ã©tÃ© ajoutÃ© Ã  ton inventaire.`,
+      message: `Achat réussi ! ${item.name} a été ajouté à ton inventaire.`,
       newBalance: user.balance,
       inventory: user.inventory,
     });
@@ -64,7 +63,7 @@ router.post('/buy/:itemId', authenticateToken, async (req, res) => {
 });
 
 // POST /shop/items (protected)
-// (IdÃ©alement rÃ©servÃ© admin, mais au minimum protÃ©gÃ© par JWT)
+// (Idéalement réservé admin, mais au minimum protégé par JWT)
 router.post('/items', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const newItem = new Item(req.body);

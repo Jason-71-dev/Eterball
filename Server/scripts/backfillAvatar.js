@@ -8,14 +8,14 @@ async function run() {
 
   const res = await User.updateMany(
     { avatarURL: { $exists: false } },
-    { $set: { avatarURL: '' } }
+    { $set: { avatarURL: '' } },
   );
 
-  console.log(`✅ Users updated: ${res.modifiedCount}`);
+  console.log(`Users updated: ${res.modifiedCount}`);
   await mongoose.disconnect();
 }
 
 run().catch((err) => {
-  console.error('❌ Backfill failed:', err);
+  console.error('Backfill failed:', err);
   process.exit(1);
 });

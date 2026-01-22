@@ -23,7 +23,7 @@
     flex-direction: column;
     gap: 6px;
 
-    /* ✅ étoile à côté du texte (si tu utilises la même structure que signup) */
+    /* étoile à côté du texte */
     .label-row {
       display: inline-flex;
       align-items: center;
@@ -54,28 +54,28 @@
     align-items: center;
     gap: 18px;
 
-    /* ✅ responsive */
+    /* responsive */
     width: min(400px, 92vw);
     padding: 40px 0px;
 
-    /* ❌ on évite height:60vh (ça casse sur petits écrans) */
+    /* on évite height:60vh (ça casse sur petits écrans) */
     height: auto;
 
     border-radius: 8px;
-    background-color: #0b1858;
+    background-color: $secondary-background;
     box-shadow: 5px 5px 8px -1px rgba(0, 0, 0, 0.286);
   }
 
   button {
     background-color: $button-color;
-    color: white;
+    color: $text-color;
     padding: 12px 24px;
     border: none;
     border-radius: 25px;
     font-size: 16px;
     font-weight: 600;
 
-    /* ✅ responsive */
+    /* responsive */
     width: min(300px, 100%);
 
     cursor: pointer;

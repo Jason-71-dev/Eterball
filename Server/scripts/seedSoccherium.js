@@ -16,7 +16,7 @@ async function upsertTeamWithStats(t) {
         slug: t.slug,
       },
     },
-    { upsert: true, new: true }
+    { upsert: true, new: true },
   );
 
   await TeamStats.findOneAndUpdate(
@@ -32,7 +32,7 @@ async function upsertTeamWithStats(t) {
       },
       $setOnInsert: { team: team._id },
     },
-    { upsert: true, new: true }
+    { upsert: true, new: true },
   );
 }
 
@@ -79,7 +79,7 @@ async function run() {
     await upsertTeamWithStats(t);
   }
 
-  console.log('✅ Soccherium seeded');
+  console.log('Soccherium seeded');
   await mongoose.disconnect();
 }
 

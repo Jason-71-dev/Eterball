@@ -4,7 +4,7 @@
   width: 100vw;
   /* hauteur responsive : varie selon l’écran */
   height: 1000px;
-  /* ton image */
+  /* image */
   background-image: url('/Hero_class.png');
   background-repeat: no-repeat;
   background-size: cover;
@@ -222,7 +222,7 @@
 
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(0, 0, 0, 0.55);
-  color: #fff;
+  color: $text-color;
 
   display: grid;
   place-items: center;
