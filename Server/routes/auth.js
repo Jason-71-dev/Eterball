@@ -116,7 +116,7 @@ router.post('/signup', async (req, res) => {
           season: 1,
         },
       },
-      { upsert: true, new: true }
+      { upsert: true, new: true },
     );
 
     return res.status(201).json({
@@ -164,9 +164,6 @@ router.post('/login', async (req, res) => {
   try {
     const cleanIdentifier = normalizeIdentifier(identifier);
 
-    console.log('[LOGIN] identifier raw:', identifier);
-    console.log('[LOGIN] identifier clean:', cleanIdentifier);
-
     const user = await User.findOne({ identifier: cleanIdentifier });
     console.log('[LOGIN] user found:', !!user);
 
@@ -197,7 +194,7 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, identifier: user.identifier, role: user.role },
       process.env.JWT_SECRET,
-      { expiresIn: '7d' }
+      { expiresIn: '7d' },
     );
 
     return res.status(200).json({
